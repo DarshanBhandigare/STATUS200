@@ -8,6 +8,8 @@ import { EditorPage } from './pages/EditorPage';
 import { PublicPortfolioPage } from './pages/PublicPortfolioPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { AuthCallbackPage } from './pages/AuthCallbackPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 export function App() {
@@ -19,7 +21,9 @@ export function App() {
       {/* Auth Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
       {/* Public Shareable Portfolio Routes */}
       <Route path="/p/:slug" element={<PublicPortfolioPage />} />

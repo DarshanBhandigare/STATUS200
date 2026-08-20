@@ -173,6 +173,14 @@ export const LoginPage: React.FC = () => {
                 }
                 required
               />
+              <div className="flex justify-end">
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-slate-400 hover:text-emerald-400 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             <div className="pt-2">

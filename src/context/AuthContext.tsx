@@ -22,6 +22,8 @@ interface AuthContextType extends AuthState {
   deleteAccount: () => Promise<{ error: Error | null }>;
   signInAsDemoUser: () => void;
   updateProfile: (profile: Partial<UserProfile>) => Promise<void>;
+  sendPasswordResetEmail: (email: string) => Promise<{ error: Error | null }>;
+  updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
 }
 
 const LOCAL_STORAGE_USER_KEY = 'devfolio_local_user';
@@ -309,6 +311,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [user]);
 
+  const sendPasswordResetEmail = useCallback(async (email: string) => {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        });
+        if (error) throw error;
+        return { error: null };
+      } catch (err: any) {
+        return { error: err };
+      }
+    }
+    // Demo mode: pretend it worked
+    return { error: null };
+  }, []);
+
+  const updatePassword = useCallback(async (newPassword: string) => {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) throw error;
+        return { error: null };
+      } catch (err: any) {
+        return { error: err };
+      }
+    }
+    return { error: null };
+  }, []);
+
   const updateProfile = useCallback(async (updates: Partial<UserProfile>) => {
     if (!user) return;
     const updated = { ...user, ...updates };
@@ -343,6 +374,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deleteAccount,
         signInAsDemoUser,
         updateProfile,
+        sendPasswordResetEmail,
+        updatePassword,
       }}
     >
       {children}
