@@ -1,0 +1,219 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import {
+  Sparkles,
+  Share2,
+  Lock,
+  ArrowRight,
+  Check,
+  RefreshCw,
+  AlertCircle,
+  Home,
+} from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { Portfolio, PortfolioContent, TemplateId } from '@/types/portfolio';
+import { DEMO_PORTFOLIOS } from '@/features/portfolio/demoData';
+import { PortfolioRenderer } from '@/features/portfolio/templates/PortfolioRenderer';
+import { Button } from '@/components/common/Button';
+import { useToast } from '@/context/ToastContext';
+
+const LOCAL_STORAGE_PORTFOLIOS_KEY = 'devfolio_portfolios';
+
+export const PublicPortfolioPage: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const { success } = useToast();
+
+  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadPublicPortfolio = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        if (!slug) {
+          setError('Invalid portfolio URL slug');
+          setIsLoading(false);
+          return;
+        }
+
+        if (isSupabaseConfigured && supabase) {
+          const { data, error: fetchErr } = await supabase
+            .from('portfolios')
+            .select('*')
+            .eq('slug', slug)
+            .single();
+
+          if (fetchErr) throw fetchErr;
+
+          if (data) {
+            const mapped: Portfolio = {
+              id: data.id,
+              userId: data.user_id,
+              title: data.title,
+              slug: data.slug,
+              template: data.template as TemplateId,
+              themeSettings: data.theme_settings,
+              content: data.content as PortfolioContent,
+              isPublished: data.is_published,
+              viewsCount: data.views_count,
+              createdAt: data.created_at,
+              updatedAt: data.updated_at,
+            };
+
+            setPortfolio(mapped);
+
+            // Increment view count asynchronously
+            if (data.is_published) {
+              await supabase
+                .from('portfolios')
+                .update({ views_count: (data.views_count || 0) + 1 })
+                .eq('id', data.id);
+            }
+          }
+        } else {
+          // Local/Demo Mode Fallback
+          const stored = localStorage.getItem(LOCAL_STORAGE_PORTFOLIOS_KEY);
+          const list: Portfolio[] = stored ? JSON.parse(stored) : DEMO_PORTFOLIOS;
+          const found = list.find((p) => p.slug === slug);
+
+          if (found) {
+            setPortfolio(found);
+            // increment view count in local storage
+            const updated = list.map((p) =>
+              p.slug === slug ? { ...p, viewsCount: (p.viewsCount || 0) + 1 } : p
+            );
+            localStorage.setItem(LOCAL_STORAGE_PORTFOLIOS_KEY, JSON.stringify(updated));
+          } else {
+            // Check if demo portfolio matches
+            const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
+            if (demo) {
+              setPortfolio(demo);
+            } else {
+              setError('Portfolio not found');
+            }
+          }
+        }
+      } catch (err: any) {
+        console.error('Error loading public portfolio:', err);
+        setError('Failed to load portfolio');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadPublicPortfolio();
+  }, [slug]);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setIsCopied(true);
+    success('Link Copied!', 'Portfolio URL copied to clipboard.');
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-400 flex flex-col items-center justify-center space-y-4">
+        <RefreshCw className="w-8 h-8 animate-spin text-emerald-400" />
+        <p className="text-xs font-mono">Loading developer portfolio...</p>
+      </div>
+    );
+  }
+
+  if (error || !portfolio) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-rose-400 mb-6 shadow-glow">
+          <AlertCircle className="w-8 h-8" />
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-white mb-2">
+          Portfolio Not Found
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-8">
+          The portfolio at <code className="text-emerald-400 font-mono">/p/{slug}</code> does not exist or has been removed.
+        </p>
+        <div className="flex items-center gap-3">
+          <Link to="/">
+            <Button variant="outline" size="sm" leftIcon={<Home className="w-4 h-4" />}>
+              Return Home
+            </Button>
+          </Link>
+          <Link to="/signup">
+            <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+              Create Your Portfolio
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Unpublished / Private Draft State
+  if (!portfolio.isPublished) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-400 mb-6 shadow-subtle">
+          <Lock className="w-8 h-8" />
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-white mb-2">
+          This Portfolio is in Draft Mode
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-8">
+          The author has set <strong className="text-slate-200">"{portfolio.title}"</strong> to private. If you are the owner, sign in to your dashboard to publish it.
+        </p>
+        <div className="flex items-center gap-3">
+          <Link to="/login">
+            <Button variant="primary" size="md">
+              Sign In to Publish
+            </Button>
+          </Link>
+          <Link to="/">
+            <Button variant="ghost" size="md">
+              Back to Status 200
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col relative">
+      {/* Rendered Portfolio Template */}
+      <main className="flex-1">
+        <PortfolioRenderer
+          content={portfolio.content}
+          theme={portfolio.themeSettings}
+          template={portfolio.template}
+          isPublic={true}
+        />
+      </main>
+
+      {/* Floating Bottom Badge */}
+      <div className="fixed bottom-4 right-4 sm:right-6 z-50 flex items-center gap-2 print:hidden">
+        <button
+          onClick={handleCopyLink}
+          className="p-2.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 shadow-2xl backdrop-blur-md transition-all hover:scale-105"
+          title="Copy Portfolio URL"
+          aria-label="Copy Portfolio Link"
+        >
+          {isCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
+        </button>
+
+        <Link
+          to="/"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white shadow-2xl backdrop-blur-md transition-all hover:scale-105 group"
+        >
+          <div className="w-5 h-5 rounded-lg bg-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-glow">
+            <Sparkles className="w-3 h-3 text-slate-950 stroke-[2.5]" />
+          </div>
+          <span className="font-display">Built with Status 200</span>
+        </Link>
+      </div>
+    </div>
+  );
+};
