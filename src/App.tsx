@@ -7,6 +7,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { EditorPage } from './pages/EditorPage';
 import { PublicPortfolioPage } from './pages/PublicPortfolioPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { AuthCallbackPage } from './pages/AuthCallbackPage';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 export function App() {
@@ -18,6 +19,7 @@ export function App() {
       {/* Auth Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
       {/* Public Shareable Portfolio Routes */}
       <Route path="/p/:slug" element={<PublicPortfolioPage />} />
