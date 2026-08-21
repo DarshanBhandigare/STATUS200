@@ -122,6 +122,11 @@ export const DashboardPage: React.FC = () => {
   const handleCreatePortfolio = async (title: string, slug: string, template: TemplateId) => {
     if (!user) return;
 
+    const canCustomizeSlug = user.isPro === true;
+    const requestedSlug = canCustomizeSlug
+      ? slug
+      : `portfolio-${Math.random().toString(36).slice(2, 8)}`;
+
     const newPortfolioContent: PortfolioContent = {
       ...DEMO_PORTFOLIO_CONTENT,
       personal: {
@@ -137,7 +142,7 @@ export const DashboardPage: React.FC = () => {
         : `port_${Math.random().toString(36).substring(2, 9)}`,
       userId: user.id,
       title,
-      slug: slugify(slug || title) || `portfolio-${Date.now().toString(36)}`,
+      slug: slugify(requestedSlug) || `portfolio-${Date.now().toString(36)}`,
       template,
       themeSettings: {
         accentColor: template === 'modern' ? '#6366f1' : '#10b981',
@@ -351,7 +356,7 @@ export const DashboardPage: React.FC = () => {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSubmit={handleCreatePortfolio}
-            canCustomizeSlug={Boolean(user?.isPro)}
+            canCustomizeSlug={user?.isPro === true}
         />
 
         {/* Delete Confirmation Modal */}
