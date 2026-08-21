@@ -47,9 +47,7 @@ export const PublicPortfolioPage: React.FC = () => {
             .eq('slug', slug)
             .single();
 
-          if (fetchErr) throw fetchErr;
-
-          if (data) {
+          if (data && !fetchErr) {
             const mapped: Portfolio = {
               id: data.id,
               userId: data.user_id,
@@ -73,22 +71,30 @@ export const PublicPortfolioPage: React.FC = () => {
                 .update({ views_count: (data.views_count || 0) + 1 })
                 .eq('id', data.id);
             }
+          } else {
+            // Not found in database — fall back to demo portfolios
+            const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
+            if (demo) {
+              setPortfolio(demo);
+            } else {
+              setError('Portfolio not found');
+            }
           }
         } else {
           // Local/Demo Mode Fallback
           const stored = localStorage.getItem(LOCAL_STORAGE_PORTFOLIOS_KEY);
-          const list: Portfolio[] = stored ? JSON.parse(stored) : DEMO_PORTFOLIOS;
-          const found = list.find((p) => p.slug === slug);
+          const localList: Portfolio[] = stored ? JSON.parse(stored) : [];
+          const found = localList.find((p) => p.slug === slug);
 
           if (found) {
             setPortfolio(found);
             // increment view count in local storage
-            const updated = list.map((p) =>
+            const updated = localList.map((p) =>
               p.slug === slug ? { ...p, viewsCount: (p.viewsCount || 0) + 1 } : p
             );
             localStorage.setItem(LOCAL_STORAGE_PORTFOLIOS_KEY, JSON.stringify(updated));
           } else {
-            // Check if demo portfolio matches
+            // Always check demo portfolios as fallback
             const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
             if (demo) {
               setPortfolio(demo);
@@ -99,7 +105,13 @@ export const PublicPortfolioPage: React.FC = () => {
         }
       } catch (err: any) {
         console.error('Error loading public portfolio:', err);
-        setError('Failed to load portfolio');
+        // Even on network/Supabase errors, try demo portfolios as last resort
+        const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
+        if (demo) {
+          setPortfolio(demo);
+        } else {
+          setError('Failed to load portfolio');
+        }
       } finally {
         setIsLoading(false);
       }

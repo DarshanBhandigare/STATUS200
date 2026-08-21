@@ -27,16 +27,16 @@ export const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 md:py-28 border-t border-slate-800/80 bg-slate-950/60">
+    <section id="how-it-works" className="py-20 md:py-28 border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/60 dark:bg-slate-950/60 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
-          <span className="text-xs font-mono font-medium text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+          <span className="text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
             Simple 3-Step Process
           </span>
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
             From blank canvas to published portfolio in minutes.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
             Stop wasting weekends wrestling with CSS templates. Focus on building great software.
           </p>
         </div>
@@ -45,18 +45,18 @@ export const HowItWorks: React.FC = () => {
           {steps.map((item, idx) => (
             <div
               key={idx}
-              className="relative p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between"
+              className="relative p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-sm transition-colors"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 flex items-center justify-center">
                     {item.icon}
                   </div>
-                  <span className="font-mono text-2xl font-bold text-slate-700">{item.step}</span>
+                  <span className="font-mono text-2xl font-bold text-slate-300 dark:text-slate-700">{item.step}</span>
                 </div>
 
-                <h3 className="text-lg font-semibold font-display text-slate-100">{item.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                <h3 className="text-lg font-semibold font-display text-slate-900 dark:text-slate-100">{item.title}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   {item.description}
                 </p>
               </div>

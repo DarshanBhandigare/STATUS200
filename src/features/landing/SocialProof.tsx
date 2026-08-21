@@ -26,20 +26,20 @@ export const SocialProof: React.FC = () => {
   ];
 
   return (
-    <section className="border-y border-slate-800/80 bg-slate-900/40 py-10">
+    <section className="border-y border-slate-200 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/40 py-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {highlights.map((item, idx) => (
             <div
               key={idx}
-              className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-900/60 transition-colors"
+              className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-colors"
             >
-              <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 shrink-0">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shrink-0 shadow-sm">
                 {item.icon}
               </div>
               <div className="space-y-0.5">
-                <h4 className="text-sm font-semibold text-slate-100">{item.title}</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">{item.description}</p>
+                <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100">{item.title}</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}

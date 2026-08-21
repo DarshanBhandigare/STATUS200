@@ -48,13 +48,13 @@ export const TemplatesPreview: React.FC = () => {
     <section id="templates" className="py-20 md:py-28 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-          <span className="text-xs font-mono font-medium text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+          <span className="text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
             Design Templates
           </span>
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
             Designed for different developer styles.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
             Switch styles anytime with one click. Your information automatically refits without retyping.
           </p>
         </div>
@@ -67,43 +67,43 @@ export const TemplatesPreview: React.FC = () => {
               onClick={() => setSelected(tmpl.id)}
               className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${
                 selected === tmpl.id
-                  ? 'bg-slate-800 text-white border border-slate-700 shadow-md ring-1 ring-emerald-500/30'
-                  : 'bg-slate-900/60 text-slate-400 border border-slate-800/80 hover:text-slate-200 hover:bg-slate-900'
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 shadow-md ring-1 ring-emerald-500/30'
+                  : 'bg-slate-100 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800/80 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-900'
               }`}
             >
-              {tmpl.id === 'minimal' && <Terminal className="w-4 h-4 text-emerald-400" />}
-              {tmpl.id === 'modern' && <Layout className="w-4 h-4 text-indigo-400" />}
-              {tmpl.id === 'professional' && <Briefcase className="w-4 h-4 text-sky-400" />}
+              {tmpl.id === 'minimal' && <Terminal className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />}
+              {tmpl.id === 'modern' && <Layout className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />}
+              {tmpl.id === 'professional' && <Briefcase className="w-4 h-4 text-sky-500 dark:text-sky-400" />}
               <span>{tmpl.name}</span>
             </button>
           ))}
         </div>
 
         {/* Active Template Showcase Display */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm transition-colors">
           {/* Template Info (Left 5 cols) */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
               <Badge variant="purple" size="sm">
                 {templates.find((t) => t.id === selected)?.tag}
               </Badge>
-              <h3 className="text-2xl font-display font-bold text-white">
+              <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white">
                 {templates.find((t) => t.id === selected)?.name}
               </h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 {templates.find((t) => t.id === selected)?.description}
               </p>
             </div>
 
             <div className="space-y-2.5 pt-2">
-              <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Key Highlights
               </p>
               {templates
                 .find((t) => t.id === selected)
                 ?.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
+                    <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
                     <span>{feat}</span>
                   </div>
                 ))}
@@ -122,7 +122,7 @@ export const TemplatesPreview: React.FC = () => {
                 href={`/p/alex-morgan`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition-colors"
               >
                 <span>Live Interactive Demo</span>
               </a>

@@ -1,8 +1,13 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* Tailwind v4 class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  /* ── Light mode (default) ── */
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html {
@@ -10,29 +15,160 @@
   }
 
   body {
-    background-color: #030712;
-    color: #f8fafc;
+    background-color: #f8fafc;
+    color: #0f172a;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* ── Dark mode ── */
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.dark body {
+    background-color: #030712;
+    color: #f8fafc;
   }
 }
 
-/* Custom subtle scrollbar */
+/* ── Scrollbar – light ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Scrollbar – dark ── */
+html.dark ::-webkit-scrollbar-track {
+  background: #090d16;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
   background: #334155;
+}
+
+/* Existing application screens use slate utilities as their dark palette.
+   Remap those utilities when light mode is active so the global toggle changes
+   the actual dashboard surface, cards, borders, and text as well as its label. */
+html:not(.dark) [class~="bg-slate-950"] {
+  background-color: #f8fafc !important;
+}
+
+html:not(.dark) [class*="bg-slate-950/"] {
+  background-color: #f8fafc !important;
+}
+
+html:not(.dark) [class~="bg-slate-900"] {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) [class*="bg-slate-900/"] {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) [class~="bg-slate-800"] {
+  background-color: #e2e8f0 !important;
+}
+
+html:not(.dark) [class~="text-white"],
+html:not(.dark) [class~="text-slate-100"],
+html:not(.dark) [class~="text-slate-200"] {
+  color: #0f172a !important;
+}
+
+html:not(.dark) [class~="text-slate-300"] {
+  color: #334155 !important;
+}
+
+html:not(.dark) [class~="text-slate-400"] {
+  color: #64748b !important;
+}
+
+html:not(.dark) [class~="border-slate-700"],
+html:not(.dark) [class~="border-slate-800"],
+html:not(.dark) [class*="border-slate-700/"],
+html:not(.dark) [class*="border-slate-800/"] {
+  border-color: #cbd5e1 !important;
+}
+
+/* The editor preview is a deliberate dark canvas even when the editor shell
+   is light. Restore its original contrast after the light utility remapping. */
+html:not(.dark) .portfolio-preview [class~="bg-slate-950"],
+html:not(.dark) .portfolio-preview [class*="bg-slate-950/"] {
+  background-color: #020617 !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="bg-slate-900"],
+html:not(.dark) .portfolio-preview [class*="bg-slate-900/"] {
+  background-color: #0f172a !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="bg-slate-800"],
+html:not(.dark) .portfolio-preview [class*="bg-slate-800/"] {
+  background-color: #1e293b !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="text-slate-100"] {
+  color: #f1f5f9 !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="text-slate-200"] {
+  color: #e2e8f0 !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="text-slate-300"] {
+  color: #cbd5e1 !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="text-slate-400"] {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) .portfolio-preview [class~="border-slate-700"],
+html:not(.dark) .portfolio-preview [class~="border-slate-800"],
+html:not(.dark) .portfolio-preview [class*="border-slate-700/"],
+html:not(.dark) .portfolio-preview [class*="border-slate-800/"] {
+  border-color: #334155 !important;
+}
+
+/* Portfolio Light Mode needs dark readable copy, even while the editor shell
+   is using the compatibility rules above. */
+html:not(.dark) .portfolio-preview.portfolio-preview-light [class~="text-white"] {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .portfolio-preview.portfolio-preview-light [class~="text-slate-100"],
+html:not(.dark) .portfolio-preview.portfolio-preview-light [class~="text-slate-200"] {
+  color: #1e293b !important;
+}
+
+html:not(.dark) .portfolio-preview.portfolio-preview-light [class~="text-slate-300"] {
+  color: #334155 !important;
+}
+
+html:not(.dark) .portfolio-preview.portfolio-preview-light [class~="text-slate-400"] {
+  color: #475569 !important;
 }

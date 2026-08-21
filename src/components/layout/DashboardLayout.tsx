@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/common/Button';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 export const DashboardLayout: React.FC<{ children: React.ReactNode; onNewPortfolio?: () => void }> = ({
   children,
@@ -82,6 +83,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode; onNewPortfol
 
           {/* Right Header: CTA + User dropdown */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             {onNewPortfolio && (
               <Button
                 variant="primary"
