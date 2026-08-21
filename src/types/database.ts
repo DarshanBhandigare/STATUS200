@@ -3,6 +3,8 @@ export interface DatabaseProfile {
   full_name: string | null;
   avatar_url: string | null;
   headline: string | null;
+  custom_domain: string | null;
+  is_pro: boolean;
   created_at: string;
   updated_at: string;
 }

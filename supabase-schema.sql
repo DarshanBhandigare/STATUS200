@@ -15,11 +15,13 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   avatar_url TEXT,
   headline TEXT,
   custom_domain TEXT UNIQUE,
+  is_pro BOOLEAN DEFAULT false NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS custom_domain TEXT UNIQUE;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_pro BOOLEAN DEFAULT false NOT NULL;
 
 -- Enable RLS for profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;

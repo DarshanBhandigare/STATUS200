@@ -5,9 +5,11 @@ import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import { useToast } from '@/context/ToastContext';
 import { loadRazorpayScript } from '@/lib/razorpay';
+import { useAuth } from '@/context/AuthContext';
 
 export const PricingSection: React.FC = () => {
   const navigate = useNavigate();
+  const { user, updateProfile } = useAuth();
   const { success, error: toastError, info } = useToast();
   const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
 
@@ -23,6 +25,12 @@ export const PricingSection: React.FC = () => {
   };
 
   const handleUpgradeToPro = async () => {
+    if (!user) {
+      toastError('Sign in required', 'Create an account or sign in before upgrading to Pro.');
+      navigate('/login');
+      return;
+    }
+
     const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined;
 
     if (!keyId) {
@@ -50,7 +58,7 @@ export const PricingSection: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: 3000,
+          amount: 5000,
           currency: 'INR',
           receipt: `status200_pro_${Date.now()}`,
         }),
@@ -126,6 +134,7 @@ export const PricingSection: React.FC = () => {
             }
 
             success('Payment successful', 'Your Pro upgrade payment is verified.');
+            await updateProfile({ isPro: true });
           } catch (verifyError) {
             console.error('Payment verify error:', verifyError);
             toastError('Payment verification failed', 'Could not verify payment.');
@@ -250,9 +259,9 @@ export const PricingSection: React.FC = () => {
 
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-display font-extrabold text-slate-900 dark:text-white">
-                  Rs. 30
+                  Rs. 50
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">/ 3 months</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">/ one-time payment</span>
               </div>
 
               <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800 text-xs">

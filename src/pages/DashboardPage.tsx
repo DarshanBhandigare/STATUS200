@@ -351,6 +351,7 @@ export const DashboardPage: React.FC = () => {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSubmit={handleCreatePortfolio}
+            canCustomizeSlug={Boolean(user?.isPro)}
         />
 
         {/* Delete Confirmation Modal */}

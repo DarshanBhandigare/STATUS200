@@ -69,6 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               avatarUrl: profile?.avatar_url || initialSession.user.user_metadata?.avatar_url,
               headline: profile?.headline,
               customDomain: profile?.custom_domain,
+              isPro: profile?.is_pro ?? false,
               createdAt: profile?.created_at || new Date().toISOString(),
             });
           }
@@ -97,6 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 avatarUrl: profile?.avatar_url || currentSession.user.user_metadata?.avatar_url,
                 headline: profile?.headline,
                 customDomain: profile?.custom_domain,
+                isPro: profile?.is_pro ?? false,
                 createdAt: profile?.created_at || new Date().toISOString(),
               });
             } else {
@@ -203,6 +205,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             avatarUrl: profile?.avatar_url,
             headline: profile?.headline,
             customDomain: profile?.custom_domain,
+            isPro: profile?.is_pro ?? false,
             createdAt: profile?.created_at || new Date().toISOString(),
           });
         }
@@ -355,6 +358,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           avatar_url: updated.avatarUrl,
           headline: updated.headline,
           custom_domain: updated.customDomain || null,
+          is_pro: updated.isPro ?? false,
         })
         .eq('id', user.id);
     } else {

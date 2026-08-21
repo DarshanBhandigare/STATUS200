@@ -5,6 +5,7 @@ export interface UserProfile {
   avatarUrl?: string;
   headline?: string;
   customDomain?: string;
+  isPro?: boolean;
   createdAt: string;
 }
 

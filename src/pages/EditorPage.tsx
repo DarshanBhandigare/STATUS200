@@ -780,11 +780,16 @@ export const EditorPage: React.FC = () => {
                   <Input
                     label="Public Portfolio Slug"
                     value={portfolio.slug}
+                    disabled={!user?.isPro}
                     onChange={(e) => {
                       setPortfolio({ ...portfolio, slug: slugify(e.target.value) });
                       setHasUnsavedChanges(true);
                     }}
-                    helperText={`Public URL: /p/${portfolio.slug}`}
+                    helperText={
+                      user?.isPro
+                        ? `Public URL: /p/${portfolio.slug}`
+                        : `Free plan URL: /p/${portfolio.slug}. Upgrade to Pro to customize it.`
+                    }
                   />
                 </div>
               </div>

@@ -10,6 +10,7 @@ interface CreatePortfolioModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (title: string, slug: string, template: TemplateId) => Promise<void>;
+  canCustomizeSlug: boolean;
 }
 
 const TEMPLATES: { id: TemplateId; name: string; tag: string; description: string }[] = [
@@ -37,6 +38,7 @@ export const CreatePortfolioModal: React.FC<CreatePortfolioModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  canCustomizeSlug,
 }) => {
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
@@ -68,9 +70,12 @@ export const CreatePortfolioModal: React.FC<CreatePortfolioModalProps> = ({
       newErrors.title = 'Portfolio title is required';
     }
 
-    if (!slug.trim()) {
+    const generatedSlug = `portfolio-${Math.random().toString(36).slice(2, 8)}`;
+    const requestedSlug = canCustomizeSlug ? slug : generatedSlug;
+
+    if (canCustomizeSlug && !slug.trim()) {
       newErrors.slug = 'Public slug is required';
-    } else if (!isValidSlug(slug)) {
+    } else if (canCustomizeSlug && !isValidSlug(slug)) {
       newErrors.slug = 'Slug must be 3-48 characters, lowercase letters, numbers, and hyphens only';
     }
 
@@ -81,7 +86,7 @@ export const CreatePortfolioModal: React.FC<CreatePortfolioModalProps> = ({
 
     setIsSubmitting(true);
     try {
-      await onSubmit(title, slug, selectedTemplate);
+      await onSubmit(title, requestedSlug, selectedTemplate);
       setTitle('');
       setSlug('');
       setSlugTouched(false);
@@ -111,7 +116,7 @@ export const CreatePortfolioModal: React.FC<CreatePortfolioModalProps> = ({
           autoFocus
         />
 
-        <div className="space-y-1.5">
+        {canCustomizeSlug ? <div className="space-y-1.5">
           <label className="block text-xs font-medium text-slate-300">
             Public Portfolio URL Slug <span className="text-rose-400">*</span>
           </label>
@@ -134,7 +139,11 @@ export const CreatePortfolioModal: React.FC<CreatePortfolioModalProps> = ({
               Shareable public link recruiters will visit. You can change this later.
             </p>
           )}
-        </div>
+        </div> : (
+          <div className="rounded-lg border border-slate-800 bg-slate-950/60 p-3 text-xs text-slate-400">
+            Your Free portfolio will receive an automatic public URL. Upgrade to Pro to choose a custom slug.
+          </div>
+        )}
 
         {/* Template Selector */}
         <div className="space-y-2">
