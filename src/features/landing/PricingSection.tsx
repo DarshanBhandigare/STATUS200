@@ -225,7 +225,7 @@ export const PricingSection: React.FC = () => {
                   </li>
                   <li className="flex items-center gap-2.5 text-slate-600 dark:text-slate-300">
                     <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                    <span>Automatic shareable URL slug</span>
+                    <span>Automatic random slug for your public URL</span>
                   </li>
                 </ul>
               </div>
@@ -254,10 +254,10 @@ export const PricingSection: React.FC = () => {
                   Pro Graduate
                 </Badge>
                 <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white">
-                  Custom Domain
+                  Custom URL Slug
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  For seniors and freelancers who want personal branding on custom domains.
+                  Choose a memorable public URL for your portfolio and share it everywhere.
                 </p>
               </div>
 
@@ -273,7 +273,7 @@ export const PricingSection: React.FC = () => {
                 <ul className="space-y-2.5">
                   <li className="flex items-center gap-2.5 text-slate-600 dark:text-slate-300">
                     <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                    <span>Connect custom domain (yourname.dev)</span>
+                    <span>Choose your own slug (<code className="text-emerald-600 dark:text-emerald-400">/p/your-name</code>)</span>
                   </li>
                   <li className="flex items-center gap-2.5 text-slate-600 dark:text-slate-300">
                     <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
