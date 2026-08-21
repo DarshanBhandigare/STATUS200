@@ -24,11 +24,13 @@ import {
   Upload,
   RefreshCw,
   CheckCircle2,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { Portfolio, PortfolioContent, ThemeSettings, TemplateId, FontStyle, ProjectItem, ExperienceItem, EducationItem, CertificationItem, AchievementItem } from '@/types/portfolio';
+import { Portfolio, PortfolioContent, ThemeSettings, TemplateId, FontStyle, ProjectItem, ExperienceItem, EducationItem, CertificationItem, AchievementItem, SocialLinks } from '@/types/portfolio';
 import { DEMO_PORTFOLIOS } from '@/features/portfolio/demoData';
 import { PortfolioRenderer } from '@/features/portfolio/templates/PortfolioRenderer';
 import { Button } from '@/components/common/Button';
@@ -295,6 +297,28 @@ export const EditorPage: React.FC = () => {
     updateContent((prev) => ({
       ...prev,
       experience: [newExp, ...prev.experience],
+    }));
+  };
+
+  const moveExperience = (experienceId: string, direction: 'up' | 'down') => {
+    updateContent((prev) => {
+      const index = prev.experience.findIndex((item) => item.id === experienceId);
+      const nextIndex = direction === 'up' ? index - 1 : index + 1;
+
+      if (index < 0 || nextIndex < 0 || nextIndex >= prev.experience.length) {
+        return prev;
+      }
+
+      const experience = [...prev.experience];
+      [experience[index], experience[nextIndex]] = [experience[nextIndex], experience[index]];
+      return { ...prev, experience };
+    });
+  };
+
+  const clearSocialLink = (key: keyof SocialLinks) => {
+    updateContent((prev) => ({
+      ...prev,
+      socialLinks: { ...prev.socialLinks, [key]: undefined },
     }));
   };
 
@@ -1081,18 +1105,42 @@ export const EditorPage: React.FC = () => {
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-mono font-bold text-emerald-400">Role #{idx + 1}</span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateContent((prev) => ({
-                              ...prev,
-                              experience: prev.experience.filter((e) => e.id !== exp.id),
-                            }))
-                          }
-                          className="p-1 text-slate-500 hover:text-rose-400 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => moveExperience(exp.id, 'up')}
+                            disabled={idx === 0}
+                            className="p-1 text-slate-500 hover:text-emerald-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Move experience up"
+                            title="Move up"
+                          >
+                            <ArrowUp className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => moveExperience(exp.id, 'down')}
+                            disabled={idx === content.experience.length - 1}
+                            className="p-1 text-slate-500 hover:text-emerald-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Move experience down"
+                            title="Move down"
+                          >
+                            <ArrowDown className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateContent((prev) => ({
+                                ...prev,
+                                experience: prev.experience.filter((e) => e.id !== exp.id),
+                              }))
+                            }
+                            className="p-1 text-slate-500 hover:text-rose-400 transition-colors"
+                            aria-label="Delete experience"
+                            title="Delete experience"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
@@ -1463,6 +1511,11 @@ export const EditorPage: React.FC = () => {
                   label="GitHub Profile URL"
                   placeholder="https://github.com/username"
                   value={content.socialLinks?.github || ''}
+                  rightIcon={content.socialLinks?.github ? (
+                    <button type="button" onClick={() => clearSocialLink('github')} className="hover:text-rose-400" aria-label="Remove GitHub link" title="Remove GitHub link">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : undefined}
                   onChange={(e) =>
                     updateContent((prev) => ({
                       ...prev,
@@ -1475,6 +1528,11 @@ export const EditorPage: React.FC = () => {
                   label="LinkedIn Profile URL"
                   placeholder="https://linkedin.com/in/username"
                   value={content.socialLinks?.linkedin || ''}
+                  rightIcon={content.socialLinks?.linkedin ? (
+                    <button type="button" onClick={() => clearSocialLink('linkedin')} className="hover:text-rose-400" aria-label="Remove LinkedIn link" title="Remove LinkedIn link">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : undefined}
                   onChange={(e) =>
                     updateContent((prev) => ({
                       ...prev,
@@ -1487,6 +1545,11 @@ export const EditorPage: React.FC = () => {
                   label="Twitter / X URL"
                   placeholder="https://x.com/username"
                   value={content.socialLinks?.twitter || ''}
+                  rightIcon={content.socialLinks?.twitter ? (
+                    <button type="button" onClick={() => clearSocialLink('twitter')} className="hover:text-rose-400" aria-label="Remove Twitter link" title="Remove Twitter link">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : undefined}
                   onChange={(e) =>
                     updateContent((prev) => ({
                       ...prev,
@@ -1499,6 +1562,11 @@ export const EditorPage: React.FC = () => {
                   label="Personal Website"
                   placeholder="https://yourdomain.com"
                   value={content.socialLinks?.website || ''}
+                  rightIcon={content.socialLinks?.website ? (
+                    <button type="button" onClick={() => clearSocialLink('website')} className="hover:text-rose-400" aria-label="Remove website link" title="Remove website link">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : undefined}
                   onChange={(e) =>
                     updateContent((prev) => ({
                       ...prev,
