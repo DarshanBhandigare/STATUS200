@@ -13,8 +13,10 @@ import { EmptyState } from '@/features/dashboard/EmptyState';
 import { Modal } from '@/components/common/Modal';
 import { Button } from '@/components/common/Button';
 import { Skeleton } from '@/components/common/Skeleton';
+import { slugify } from '@/lib/utils';
 
 const LOCAL_STORAGE_PORTFOLIOS_KEY = 'devfolio_portfolios';
+const MAX_SLUG_SUFFIX_ATTEMPTS = 50;
 
 export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -81,16 +83,44 @@ export const DashboardPage: React.FC = () => {
     loadPortfolios();
   }, [user]);
 
+  const doesSlugExistLocally = (candidateSlug: string) =>
+    portfolios.some((portfolio) => portfolio.slug === candidateSlug);
+
+  const doesSlugExistInDatabase = async (candidateSlug: string) => {
+    if (!isSupabaseConfigured || !supabase) return false;
+
+    const { data, error } = await supabase
+      .from('portfolios')
+      .select('id')
+      .eq('slug', candidateSlug)
+      .limit(1);
+
+    if (error) throw error;
+    return (data?.length || 0) > 0;
+  };
+
+  const resolveUniqueSlug = async (requestedSlug: string) => {
+    const baseSlug = slugify(requestedSlug) || `portfolio-${Date.now().toString(36)}`;
+
+    for (let suffix = 0; suffix < MAX_SLUG_SUFFIX_ATTEMPTS; suffix += 1) {
+      const candidate = suffix === 0 ? baseSlug : `${baseSlug}-${suffix + 1}`;
+      const existsLocally = doesSlugExistLocally(candidate);
+      const existsInDb = await doesSlugExistInDatabase(candidate);
+
+      if (!existsLocally && !existsInDb) {
+        return candidate;
+      }
+    }
+
+    return `${baseSlug}-${Date.now().toString(36)}`;
+  };
+
+  const isUniqueConstraintError = (err: any) =>
+    err?.code === '23505' || /duplicate key value violates unique constraint/i.test(err?.message || '');
+
   // Create Portfolio Handler
   const handleCreatePortfolio = async (title: string, slug: string, template: TemplateId) => {
     if (!user) return;
-
-    // Check slug uniqueness locally or in database
-    const existing = portfolios.find((p) => p.slug === slug);
-    if (existing) {
-      toastError('Slug already in use', 'Please choose a different unique URL slug.');
-      throw new Error('Slug in use');
-    }
 
     const newPortfolioContent: PortfolioContent = {
       ...DEMO_PORTFOLIO_CONTENT,
@@ -107,7 +137,7 @@ export const DashboardPage: React.FC = () => {
         : `port_${Math.random().toString(36).substring(2, 9)}`,
       userId: user.id,
       title,
-      slug,
+      slug: slugify(slug || title) || `portfolio-${Date.now().toString(36)}`,
       template,
       themeSettings: {
         accentColor: template === 'modern' ? '#6366f1' : '#10b981',
@@ -122,26 +152,45 @@ export const DashboardPage: React.FC = () => {
     };
 
     if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase
-        .from('portfolios')
-        .insert({
-          user_id: user.id,
-          title: newPortfolio.title,
-          slug: newPortfolio.slug,
-          template: newPortfolio.template,
-          theme_settings: newPortfolio.themeSettings,
-          content: newPortfolio.content,
-          is_published: false,
-        })
-        .select()
-        .single();
+      let createError: any = null;
+      const baseSlug = newPortfolio.slug;
+      let nextSlug = baseSlug;
 
-      if (error) {
-        toastError('Failed to create portfolio', error.message);
-        throw error;
+      for (let attempt = 0; attempt < MAX_SLUG_SUFFIX_ATTEMPTS; attempt += 1) {
+        nextSlug = await resolveUniqueSlug(nextSlug);
+        newPortfolio.slug = nextSlug;
+
+        const { data, error } = await supabase
+          .from('portfolios')
+          .insert({
+            user_id: user.id,
+            title: newPortfolio.title,
+            slug: newPortfolio.slug,
+            template: newPortfolio.template,
+            theme_settings: newPortfolio.themeSettings,
+            content: newPortfolio.content,
+            is_published: false,
+          })
+          .select()
+          .single();
+
+        if (!error && data) {
+          newPortfolio.id = data.id;
+          createError = null;
+          break;
+        }
+
+        createError = error;
+        if (!isUniqueConstraintError(error)) {
+          break;
+        }
+
+        nextSlug = `${baseSlug}-${attempt + 2}`;
       }
-      if (data) {
-        newPortfolio.id = data.id;
+
+      if (createError) {
+        toastError('Failed to create portfolio', createError.message);
+        throw createError;
       }
     } else {
       const updatedList = [newPortfolio, ...portfolios];
@@ -149,7 +198,7 @@ export const DashboardPage: React.FC = () => {
     }
 
     setPortfolios((prev) => [newPortfolio, ...prev]);
-    success('Portfolio Created!', `"${title}" has been created successfully.`);
+    success('Portfolio Created!', `"${title}" has been created successfully at /p/${newPortfolio.slug}.`);
   };
 
   // Publish / Unpublish Toggle
