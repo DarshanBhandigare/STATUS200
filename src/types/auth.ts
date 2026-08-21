@@ -4,6 +4,7 @@ export interface UserProfile {
   fullName: string;
   avatarUrl?: string;
   headline?: string;
+  customDomain?: string;
   createdAt: string;
 }
 

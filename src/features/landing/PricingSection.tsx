@@ -50,7 +50,7 @@ export const PricingSection: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: 49900,
+          amount: 3000,
           currency: 'INR',
           receipt: `status200_pro_${Date.now()}`,
         }),
@@ -250,9 +250,9 @@ export const PricingSection: React.FC = () => {
 
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-display font-extrabold text-slate-900 dark:text-white">
-                  Rs. 499
+                  Rs. 30
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">/ year, billed annually</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">/ 3 months</span>
               </div>
 
               <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800 text-xs">

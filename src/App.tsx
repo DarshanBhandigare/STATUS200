@@ -12,10 +12,21 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
+function RootRoute() {
+  const hostname = window.location.hostname;
+  const isPlatformHost =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.endsWith('.localhost') ||
+    hostname === 'status-200.vercel.app';
+
+  return isPlatformHost ? <LandingPage /> : <PublicPortfolioPage />;
+}
+
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<RootRoute />} />
 
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />

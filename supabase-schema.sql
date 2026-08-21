@@ -14,9 +14,12 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   full_name TEXT,
   avatar_url TEXT,
   headline TEXT,
+  custom_domain TEXT UNIQUE,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS custom_domain TEXT UNIQUE;
 
 -- Enable RLS for profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;

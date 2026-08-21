@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Save, Trash2, AlertTriangle } from 'lucide-react';
+import { User, Mail, Save, Trash2, AlertTriangle, Globe } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
@@ -17,11 +17,16 @@ export const SettingsPage: React.FC = () => {
 
   const [fullName, setFullName] = useState(user?.fullName || '');
   const [headline, setHeadline] = useState(user?.headline || '');
+  const [customDomain, setCustomDomain] = useState(user?.customDomain || '');
   const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
+
+  React.useEffect(() => {
+    setCustomDomain(user?.customDomain || '');
+  }, [user?.customDomain]);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +36,7 @@ export const SettingsPage: React.FC = () => {
         fullName,
         headline,
         avatarUrl,
+        customDomain: customDomain.trim().toLowerCase(),
       });
       success('Profile Updated', 'Your personal account profile has been saved.');
     } finally {
@@ -108,6 +114,21 @@ export const SettingsPage: React.FC = () => {
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
             />
+
+            <div className="space-y-3 border-t border-slate-800 pt-5">
+              <Input
+                label="Custom Domain (Pro)"
+                placeholder="yourname.dev"
+                value={customDomain}
+                onChange={(e) => setCustomDomain(e.target.value)}
+                leftIcon={<Globe className="w-4 h-4" />}
+                helperText="Buy the domain from a registrar, then point its DNS to Vercel."
+              />
+              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3 text-xs text-slate-400">
+                <p className="font-semibold text-emerald-300">DNS setup</p>
+                <p className="mt-1">Add a CNAME record for www pointing to cname.vercel-dns.com, then add the domain in your Vercel project settings.</p>
+              </div>
+            </div>
 
             <div className="pt-4 border-t border-slate-800 flex justify-end">
               <Button

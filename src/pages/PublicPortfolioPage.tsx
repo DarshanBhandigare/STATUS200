@@ -36,18 +36,25 @@ export const PublicPortfolioPage: React.FC = () => {
       setError(null);
 
       try {
-        if (!slug) {
-          setError('Invalid portfolio URL slug');
-          setIsLoading(false);
-          return;
-        }
+        const customDomain = !slug
+          ? window.location.hostname.replace(/^www\./, '').toLowerCase()
+          : null;
 
         if (isSupabaseConfigured && supabase) {
-          const { data, error: fetchErr } = await supabase
-            .from('portfolios')
-            .select('*')
-            .eq('slug', slug)
-            .single();
+          let ownerId: string | null = null;
+          if (customDomain) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('id')
+              .eq('custom_domain', customDomain)
+              .single();
+            ownerId = profile?.id || null;
+          }
+
+          const query = supabase.from('portfolios').select('*');
+          const { data, error: fetchErr } = customDomain
+            ? await query.eq('user_id', ownerId || '').eq('is_published', true).maybeSingle()
+            : await query.eq('slug', slug).single();
 
           if (data && !fetchErr) {
             const mapped: Portfolio = {
