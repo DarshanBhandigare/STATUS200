@@ -95,7 +95,7 @@ export const HeroSection: React.FC = () => {
                   className="px-3 py-1 rounded-md bg-slate-950/80 hover:bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 hover:text-emerald-400 flex items-center gap-1.5 transition-colors"
                 >
                   <Globe className="w-3 h-3 text-emerald-400" />
-                  <span>status200.dev/p/alex-morgan</span>
+                  <span>status-200.vercel.app/p/alex-morgan</span>
                 </a>
                 <Badge variant="success" size="sm">
                   LIVE

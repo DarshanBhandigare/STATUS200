@@ -21,7 +21,7 @@ export const SocialProof: React.FC = () => {
     {
       icon: <ShieldCheck className="w-5 h-5 text-purple-400" />,
       title: 'Standard Clean URL',
-      description: 'Get an instant clean public link like status200.dev/p/yourname to paste directly on resumes.',
+      description: 'Get an instant clean public link like status-200.vercel.app/p/yourname to paste directly on resumes.',
     },
   ];
 

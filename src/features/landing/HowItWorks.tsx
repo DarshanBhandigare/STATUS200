@@ -22,7 +22,7 @@ export const HowItWorks: React.FC = () => {
       icon: <Rocket className="w-6 h-6 text-sky-400" />,
       title: 'Publish & Share Everywhere',
       description:
-        'Hit publish to get your personal vanity URL (e.g. status200.dev/p/alex). Add it to your resume header, LinkedIn profile, and job forms.',
+        'Hit publish to get your personal vanity URL (e.g. status-200.vercel.app/p/alex). Add it to your resume header, LinkedIn profile, and job forms.',
     },
   ];
 

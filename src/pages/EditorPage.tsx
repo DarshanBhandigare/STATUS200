@@ -379,7 +379,7 @@ export const EditorPage: React.FC = () => {
   const { content, themeSettings, template } = portfolio;
 
   return (
-    <div className="h-screen w-screen bg-slate-950 text-slate-100 flex flex-col overflow-hidden selection:bg-emerald-500 selection:text-slate-950">
+    <div className="app-theme-surface h-screen w-screen bg-slate-950 text-slate-100 flex flex-col overflow-hidden selection:bg-emerald-500 selection:text-slate-950">
       {/* Top Application Header Bar */}
       <header className="h-16 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between shrink-0 z-20">
         {/* Left: Back & Title */}
@@ -1539,7 +1539,7 @@ export const EditorPage: React.FC = () => {
               </div>
 
               <div className="px-4 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300 max-w-sm truncate">
-                https://status200.dev/p/{portfolio.slug}
+                https://status-200.vercel.app/p/{portfolio.slug}
               </div>
 
               <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">

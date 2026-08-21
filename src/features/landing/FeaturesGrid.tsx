@@ -39,7 +39,7 @@ export const FeaturesGrid: React.FC = () => {
       icon: <Share2 className="w-5 h-5 text-rose-400" />,
       title: 'Custom Shareable URL',
       description:
-        'Claim your unique URL like status200.dev/p/your-slug. Share it in your LinkedIn bio, email signature, and job applications.',
+        'Claim your unique URL like status-200.vercel.app/p/your-slug. Share it in your LinkedIn bio, email signature, and job applications.',
     },
     {
       icon: <Smartphone className="w-5 h-5 text-teal-400" />,

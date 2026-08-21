@@ -28,7 +28,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode; onNewPortfol
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="app-theme-surface min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* Top Banner if in Demo Mode */}
       {isDemoMode && (
         <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/20 px-4 py-1.5 text-xs flex items-center justify-between text-slate-300">

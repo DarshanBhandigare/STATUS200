@@ -117,7 +117,7 @@ export const CreatePortfolioModal: React.FC<CreatePortfolioModalProps> = ({
           </label>
           <div className="flex items-center rounded-lg bg-slate-900 border border-slate-700/80 focus-within:border-emerald-500 overflow-hidden text-sm">
             <span className="px-3 py-2 bg-slate-800 text-slate-400 text-xs font-mono border-r border-slate-700 select-none">
-              status200.dev/p/
+              status-200.vercel.app/p/
             </span>
             <input
               type="text"

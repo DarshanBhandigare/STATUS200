@@ -49,7 +49,9 @@ export const PortfolioRenderer: React.FC<PortfolioRendererProps> = ({
 
   return (
     <div
-      className={`w-full min-h-full ${fontClass}`}
+      className={`portfolio-rendered ${
+        theme.darkMode ? 'portfolio-rendered-dark' : 'portfolio-rendered-light'
+      } w-full min-h-full ${fontClass}`}
       style={
         {
           '--accent-color': theme.accentColor,
