@@ -15,21 +15,17 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 export function App() {
   return (
     <Routes>
-      {/* Public Marketing Route */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* Auth Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
-      {/* Public Shareable Portfolio Routes */}
       <Route path="/p/:slug" element={<PublicPortfolioPage />} />
       <Route path="/portfolio/:slug" element={<PublicPortfolioPage />} />
 
-      {/* Protected SaaS App Routes */}
       <Route
         path="/dashboard"
         element={
@@ -47,7 +43,6 @@ export function App() {
         }
       />
 
-      {/* Full-Featured Portfolio Editor */}
       <Route
         path="/editor/:id"
         element={
@@ -57,7 +52,6 @@ export function App() {
         }
       />
 
-      {/* 404 Fallback */}
       <Route path="/404" element={<NotFoundPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

@@ -6,6 +6,7 @@ import {
   Lock,
   ArrowRight,
   Check,
+  Download,
   RefreshCw,
   AlertCircle,
   Home,
@@ -64,7 +65,6 @@ export const PublicPortfolioPage: React.FC = () => {
 
             setPortfolio(mapped);
 
-            // Increment view count asynchronously
             if (data.is_published) {
               await supabase
                 .from('portfolios')
@@ -72,7 +72,6 @@ export const PublicPortfolioPage: React.FC = () => {
                 .eq('id', data.id);
             }
           } else {
-            // Not found in database — fall back to demo portfolios
             const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
             if (demo) {
               setPortfolio(demo);
@@ -81,20 +80,17 @@ export const PublicPortfolioPage: React.FC = () => {
             }
           }
         } else {
-          // Local/Demo Mode Fallback
           const stored = localStorage.getItem(LOCAL_STORAGE_PORTFOLIOS_KEY);
           const localList: Portfolio[] = stored ? JSON.parse(stored) : [];
           const found = localList.find((p) => p.slug === slug);
 
           if (found) {
             setPortfolio(found);
-            // increment view count in local storage
             const updated = localList.map((p) =>
               p.slug === slug ? { ...p, viewsCount: (p.viewsCount || 0) + 1 } : p
             );
             localStorage.setItem(LOCAL_STORAGE_PORTFOLIOS_KEY, JSON.stringify(updated));
           } else {
-            // Always check demo portfolios as fallback
             const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
             if (demo) {
               setPortfolio(demo);
@@ -105,7 +101,6 @@ export const PublicPortfolioPage: React.FC = () => {
         }
       } catch (err: any) {
         console.error('Error loading public portfolio:', err);
-        // Even on network/Supabase errors, try demo portfolios as last resort
         const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
         if (demo) {
           setPortfolio(demo);
@@ -164,7 +159,6 @@ export const PublicPortfolioPage: React.FC = () => {
     );
   }
 
-  // Unpublished / Private Draft State
   if (!portfolio.isPublished) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 text-center">
@@ -195,7 +189,6 @@ export const PublicPortfolioPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative">
-      {/* Rendered Portfolio Template */}
       <main className="flex-1">
         <PortfolioRenderer
           content={portfolio.content}
@@ -205,7 +198,6 @@ export const PublicPortfolioPage: React.FC = () => {
         />
       </main>
 
-      {/* Floating Bottom Badge */}
       <div className="fixed bottom-4 right-4 sm:right-6 z-50 flex items-center gap-2 print:hidden">
         {portfolio.content?.resume?.url && (
           <a
