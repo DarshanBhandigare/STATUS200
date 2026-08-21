@@ -3,6 +3,7 @@ import { Portfolio, PortfolioContent, ThemeSettings, TemplateId } from '@/types/
 import { TerminalTemplate } from './TerminalTemplate';
 import { ModernTemplate } from './ModernTemplate';
 import { ProfessionalTemplate } from './ProfessionalTemplate';
+import { DEFAULT_THEME_SETTINGS, EMPTY_PORTFOLIO_CONTENT } from '@/features/portfolio/defaults';
 
 interface PortfolioRendererProps {
   portfolio?: Portfolio;
@@ -18,6 +19,9 @@ export const PortfolioRenderer: React.FC<PortfolioRendererProps> = ({
   template,
   isPublic = false,
 }) => {
+  const safeTheme = theme ?? DEFAULT_THEME_SETTINGS;
+  const safeContent = content ?? EMPTY_PORTFOLIO_CONTENT;
+
   const getFontFamilyClass = (fontStyle?: string) => {
     switch (fontStyle) {
       case 'plus-jakarta':
@@ -32,29 +36,29 @@ export const PortfolioRenderer: React.FC<PortfolioRendererProps> = ({
     }
   };
 
-  const fontClass = getFontFamilyClass(theme.fontStyle);
+  const fontClass = getFontFamilyClass(safeTheme.fontStyle);
 
   const renderSelectedTemplate = () => {
     switch (template) {
       case 'minimal':
-        return <TerminalTemplate content={content} theme={theme} isPublic={isPublic} />;
+        return <TerminalTemplate content={safeContent} theme={safeTheme} isPublic={isPublic} />;
       case 'modern':
-        return <ModernTemplate content={content} theme={theme} isPublic={isPublic} />;
+        return <ModernTemplate content={safeContent} theme={safeTheme} isPublic={isPublic} />;
       case 'professional':
-        return <ProfessionalTemplate content={content} theme={theme} isPublic={isPublic} />;
+        return <ProfessionalTemplate content={safeContent} theme={safeTheme} isPublic={isPublic} />;
       default:
-        return <TerminalTemplate content={content} theme={theme} isPublic={isPublic} />;
+        return <TerminalTemplate content={safeContent} theme={safeTheme} isPublic={isPublic} />;
     }
   };
 
   return (
     <div
       className={`portfolio-rendered ${
-        theme.darkMode ? 'portfolio-rendered-dark' : 'portfolio-rendered-light'
+        safeTheme.darkMode ? 'portfolio-rendered-dark' : 'portfolio-rendered-light'
       } w-full min-h-full ${fontClass}`}
       style={
         {
-          '--accent-color': theme.accentColor,
+          '--accent-color': safeTheme.accentColor,
         } as React.CSSProperties
       }
     >

@@ -15,6 +15,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Portfolio, PortfolioContent, TemplateId } from '@/types/portfolio';
 import { DEMO_PORTFOLIOS } from '@/features/portfolio/demoData';
 import { PortfolioRenderer } from '@/features/portfolio/templates/PortfolioRenderer';
+import { DEFAULT_THEME_SETTINGS, EMPTY_PORTFOLIO_CONTENT } from '@/features/portfolio/defaults';
 import { Button } from '@/components/common/Button';
 import { useToast } from '@/context/ToastContext';
 
@@ -55,8 +56,8 @@ export const PublicPortfolioPage: React.FC = () => {
               title: data.title,
               slug: data.slug,
               template: data.template as TemplateId,
-              themeSettings: data.theme_settings,
-              content: data.content as PortfolioContent,
+              themeSettings: data.theme_settings ?? DEFAULT_THEME_SETTINGS,
+              content: (data.content as PortfolioContent) ?? EMPTY_PORTFOLIO_CONTENT,
               isPublished: data.is_published,
               viewsCount: data.views_count,
               createdAt: data.created_at,
