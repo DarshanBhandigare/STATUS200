@@ -27,6 +27,8 @@ export const DashboardPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const isPro = user?.isPro === true;
+  const freePortfolioLimitReached = !isPro && portfolios.length >= 1;
 
   // Load Portfolios
   const loadPortfolios = async () => {
@@ -122,7 +124,12 @@ export const DashboardPage: React.FC = () => {
   const handleCreatePortfolio = async (title: string, slug: string, template: TemplateId) => {
     if (!user) return;
 
-    const canCustomizeSlug = user.isPro === true;
+    if (freePortfolioLimitReached) {
+      toastError('Free plan limit reached', 'Free accounts can create one portfolio. Upgrade to Pro to create more.');
+      return;
+    }
+
+    const canCustomizeSlug = isPro;
     const requestedSlug = canCustomizeSlug
       ? slug
       : `portfolio-${Math.random().toString(36).slice(2, 8)}`;
@@ -274,7 +281,7 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout onNewPortfolio={() => setIsCreateModalOpen(true)}>
+    <DashboardLayout onNewPortfolio={freePortfolioLimitReached ? undefined : () => setIsCreateModalOpen(true)}>
       <div className="space-y-8">
         {/* Page Title Row */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -299,10 +306,18 @@ export const DashboardPage: React.FC = () => {
             <Button
               variant="primary"
               size="sm"
-              onClick={() => setIsCreateModalOpen(true)}
+              onClick={() => {
+                if (freePortfolioLimitReached) {
+                  toastError('Free plan limit reached', 'Upgrade to Pro to create more portfolios.');
+                  return;
+                }
+                setIsCreateModalOpen(true);
+              }}
+              disabled={freePortfolioLimitReached}
+              title={freePortfolioLimitReached ? 'Free accounts can create one portfolio' : 'Create a portfolio'}
               leftIcon={<Plus className="w-4 h-4" />}
             >
-              Create Portfolio
+              {freePortfolioLimitReached ? 'Upgrade to Create More' : 'Create Portfolio'}
             </Button>
           </div>
         </div>
@@ -351,12 +366,18 @@ export const DashboardPage: React.FC = () => {
           </div>
         )}
 
+        {!isLoading && freePortfolioLimitReached && (
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-xs text-slate-400">
+            You are using your 1 free portfolio. Upgrade to Pro to create unlimited portfolios.
+          </div>
+        )}
+
         {/* Create Portfolio Modal */}
         <CreatePortfolioModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSubmit={handleCreatePortfolio}
-            canCustomizeSlug={user?.isPro === true}
+          canCustomizeSlug={isPro}
         />
 
         {/* Delete Confirmation Modal */}
