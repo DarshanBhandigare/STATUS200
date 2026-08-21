@@ -84,6 +84,15 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode; onNewPortfol
           {/* Right Header: CTA + User dropdown */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
+            <span
+              className={`hidden sm:inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
+                user?.isPro === true
+                  ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                  : 'border-slate-700 bg-slate-900 text-slate-400'
+              }`}
+            >
+              {user?.isPro === true ? 'Pro account' : 'Free account'}
+            </span>
             {onNewPortfolio && (
               <Button
                 variant="primary"
@@ -133,6 +142,9 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode; onNewPortfol
                     <div className="px-3 py-2 border-b border-slate-800 mb-1">
                       <p className="font-semibold text-slate-200 truncate">{user?.fullName}</p>
                       <p className="text-[11px] text-slate-400 truncate">{user?.email}</p>
+                      <p className={`text-[11px] mt-1 font-semibold ${user?.isPro === true ? 'text-emerald-400' : 'text-slate-500'}`}>
+                        {user?.isPro === true ? 'Pro account' : 'Free account'}
+                      </p>
                     </div>
 
                     <Link

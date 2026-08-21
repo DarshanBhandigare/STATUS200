@@ -29,6 +29,7 @@ export const PublicPortfolioPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [ownerIsPro, setOwnerIsPro] = useState(false);
 
   useEffect(() => {
     const loadPublicPortfolio = async () => {
@@ -57,6 +58,13 @@ export const PublicPortfolioPage: React.FC = () => {
             : await query.eq('slug', slug).single();
 
           if (data && !fetchErr) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('is_pro')
+              .eq('id', data.user_id)
+              .maybeSingle();
+
+            setOwnerIsPro(profile?.is_pro === true);
             const mapped: Portfolio = {
               id: data.id,
               userId: data.user_id,
@@ -83,6 +91,7 @@ export const PublicPortfolioPage: React.FC = () => {
             const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
             if (demo) {
               setPortfolio(demo);
+              setOwnerIsPro(false);
             } else {
               setError('Portfolio not found');
             }
@@ -94,6 +103,7 @@ export const PublicPortfolioPage: React.FC = () => {
 
           if (found) {
             setPortfolio(found);
+            setOwnerIsPro(false);
             const updated = localList.map((p) =>
               p.slug === slug ? { ...p, viewsCount: (p.viewsCount || 0) + 1 } : p
             );
@@ -102,6 +112,7 @@ export const PublicPortfolioPage: React.FC = () => {
             const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
             if (demo) {
               setPortfolio(demo);
+              setOwnerIsPro(false);
             } else {
               setError('Portfolio not found');
             }
@@ -112,6 +123,7 @@ export const PublicPortfolioPage: React.FC = () => {
         const demo = DEMO_PORTFOLIOS.find((p) => p.slug === slug);
         if (demo) {
           setPortfolio(demo);
+          setOwnerIsPro(false);
         } else {
           setError('Failed to load portfolio');
         }
@@ -229,15 +241,17 @@ export const PublicPortfolioPage: React.FC = () => {
           {isCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
         </button>
 
-        <Link
-          to="/"
-          className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white shadow-2xl backdrop-blur-md transition-all hover:scale-105 group"
-        >
-          <div className="w-5 h-5 rounded-lg bg-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-glow">
-            <Sparkles className="w-3 h-3 text-slate-950 stroke-[2.5]" />
-          </div>
-          <span className="font-display">Built with Status 200</span>
-        </Link>
+        {!ownerIsPro && (
+          <Link
+            to="/"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white shadow-2xl backdrop-blur-md transition-all hover:scale-105 group"
+          >
+            <div className="w-5 h-5 rounded-lg bg-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-glow">
+              <Sparkles className="w-3 h-3 text-slate-950 stroke-[2.5]" />
+            </div>
+            <span className="font-display">Built with Status 200</span>
+          </Link>
+        )}
       </div>
     </div>
   );
