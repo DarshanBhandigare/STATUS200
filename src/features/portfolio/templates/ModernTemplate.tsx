@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Sparkles,
   MapPin,
@@ -358,7 +358,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme, isPubl
                         </div>
                         <span className="text-[11px] text-slate-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3 text-slate-500" />
-                          {exp.startDate} â€” {exp.endDate || 'Present'}
+                          {exp.startDate} — {exp.endDate || 'Present'}
                         </span>
                       </div>
 
@@ -390,7 +390,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme, isPubl
                       </h3>
                       <p className="text-xs text-slate-300">{edu.institution}</p>
                       <p className="text-[11px] text-slate-500">
-                        {edu.startDate} â€” {edu.endDate}
+                        {edu.startDate} — {edu.endDate}
                       </p>
                       {edu.description && (
                         <p className={`text-xs pt-1 ${subtextClass}`}>{edu.description}</p>

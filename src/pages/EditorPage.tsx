@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useRef } from 'react';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
@@ -471,11 +471,11 @@ export const EditorPage: React.FC = () => {
             />
             {hasUnsavedChanges ? (
               <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                â— Unsaved
+                ● Unsaved
               </span>
             ) : (
               <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 hidden sm:inline">
-                âœ“ Saved
+                ✓ Saved
               </span>
             )}
           </div>
@@ -771,7 +771,7 @@ export const EditorPage: React.FC = () => {
                         : 'bg-slate-200 text-slate-900 border border-slate-300'
                     }`}
                   >
-                    {themeSettings.darkMode ? 'ðŸŒ™ Dark Mode' : 'â˜€ï¸ Light Mode'}
+                    {themeSettings.darkMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
                   </button>
                 </div>
 
@@ -976,7 +976,7 @@ export const EditorPage: React.FC = () => {
                           onClick={() => handleRemoveSkill(skill)}
                           className="text-slate-400 hover:text-rose-400 transition-colors ml-1"
                         >
-                          Ã—
+                          ×
                         </button>
                       </span>
                     ))}

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   MapPin,
   Mail,
@@ -218,7 +218,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme, 
                     </p>
                     <p className="text-slate-400">{edu.institution}</p>
                     <p className="text-[10px] text-slate-500">
-                      {edu.startDate} â€” {edu.endDate}
+                      {edu.startDate} — {edu.endDate}
                     </p>
                     {edu.description && (
                       <p className="text-[11px] text-slate-400 pt-0.5">{edu.description}</p>
@@ -268,7 +268,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme, 
                           </p>
                         </div>
                         <span className="text-xs text-slate-400 font-mono">
-                          {exp.startDate} â€” {exp.endDate || 'Present'}
+                          {exp.startDate} — {exp.endDate || 'Present'}
                         </span>
                       </div>
 
@@ -362,7 +362,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme, 
                   {certifications.map((cert, idx) => (
                     <div key={cert.id || idx} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 text-xs space-y-0.5">
                       <p className="font-semibold text-white">{cert.name}</p>
-                      <p className="text-slate-400 text-[11px]">{cert.issuer} {cert.date ? `â€¢ ${cert.date}` : ''}</p>
+                      <p className="text-slate-400 text-[11px]">{cert.issuer} {cert.date ? `• ${cert.date}` : ''}</p>
                       {cert.credentialUrl && (
                         <a
                           href={cert.credentialUrl}

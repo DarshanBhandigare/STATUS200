@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   MapPin,
   ExternalLink,
@@ -361,7 +361,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme, isPu
                         </div>
                         <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1">
                           <Calendar className="w-3 h-3 text-slate-500" />
-                          {exp.startDate} â€” {exp.endDate || 'Present'}
+                          {exp.startDate} — {exp.endDate || 'Present'}
                         </span>
                       </div>
 
@@ -396,7 +396,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme, isPu
                           <p className="text-xs text-slate-300">{edu.institution}</p>
                         </div>
                         <span className="text-[11px] text-slate-400 font-mono">
-                          {edu.startDate} â€” {edu.endDate}
+                          {edu.startDate} — {edu.endDate}
                         </span>
                       </div>
                       {edu.description && (
