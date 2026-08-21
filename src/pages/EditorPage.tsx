@@ -143,7 +143,7 @@ export const EditorPage: React.FC = () => {
     };
 
     fetchPortfolio();
-  }, [id, user]);
+  }, [id, user?.id]);
 
   // Update Portfolio Helper
   const updateContent = useCallback((updater: (prev: PortfolioContent) => PortfolioContent) => {
@@ -533,6 +533,7 @@ export const EditorPage: React.FC = () => {
           {/* Section Navigation Tabs */}
           <div className="flex items-center gap-1 p-2 border-b border-slate-800 bg-slate-900/60 flex-wrap shrink-0">
             <button
+              type="button"
               onClick={() => setActiveTab('theme')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'theme'
@@ -544,6 +545,7 @@ export const EditorPage: React.FC = () => {
               <span>Theme</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('personal')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'personal'
@@ -555,6 +557,7 @@ export const EditorPage: React.FC = () => {
               <span>Personal</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('skills')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'skills'
@@ -566,6 +569,7 @@ export const EditorPage: React.FC = () => {
               <span>Skills ({content.skills.length})</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('projects')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'projects'
@@ -577,6 +581,7 @@ export const EditorPage: React.FC = () => {
               <span>Projects ({content.projects.length})</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('experience')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'experience'
@@ -588,6 +593,7 @@ export const EditorPage: React.FC = () => {
               <span>Experience</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('education')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'education'
@@ -599,6 +605,7 @@ export const EditorPage: React.FC = () => {
               <span>Education</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('certs')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'certs'
@@ -610,6 +617,7 @@ export const EditorPage: React.FC = () => {
               <span>Honors</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('social')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-colors ${
                 activeTab === 'social'
