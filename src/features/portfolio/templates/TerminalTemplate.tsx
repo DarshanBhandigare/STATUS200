@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   MapPin,
   ExternalLink,
@@ -18,13 +18,22 @@ interface TemplateProps {
   isPublic?: boolean;
 }
 
-export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
+export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme, isPublic = false }) => {
   const [activeTab, setActiveTab] = useState<'all' | 'projects' | 'experience' | 'skills' | 'education'>('all');
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const { personal, about, skills, education, projects, experience, certifications, achievements, socialLinks, resume } = content;
+  const personal = content?.personal || { fullName: '', title: '', avatarUrl: '', location: '', email: '', phone: '', introduction: '' };
+  const about = content?.about || { bio: '' };
+  const skills = content?.skills || [];
+  const education = content?.education || [];
+  const projects = content?.projects || [];
+  const experience = content?.experience || [];
+  const certifications = content?.certifications || [];
+  const achievements = content?.achievements || [];
+  const socialLinks = content?.socialLinks || {};
+  const resume = content?.resume || { url: '', filename: '' };
 
-  const accentHex = theme.accentColor || '#10b981';
+  const accentHex = theme?.accentColor || '#10b981';
 
   // Dynamic terminal username derived from custom username or user's full name
   const username = personal.username?.trim()
@@ -117,7 +126,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme }) =>
 
                 {/* Quick actions & Socials */}
                 <div className="flex flex-wrap items-center gap-2.5">
-                  {resume?.url && (
+                  {!isPublic && resume?.url && (
                     <a
                       href={resume.url}
                       download={resume.filename || `${personal.fullName || 'developer'}_Resume.pdf`}
@@ -352,7 +361,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme }) =>
                         </div>
                         <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1">
                           <Calendar className="w-3 h-3 text-slate-500" />
-                          {exp.startDate} — {exp.endDate || 'Present'}
+                          {exp.startDate} â€” {exp.endDate || 'Present'}
                         </span>
                       </div>
 
@@ -387,7 +396,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme }) =>
                           <p className="text-xs text-slate-300">{edu.institution}</p>
                         </div>
                         <span className="text-[11px] text-slate-400 font-mono">
-                          {edu.startDate} — {edu.endDate}
+                          {edu.startDate} â€” {edu.endDate}
                         </span>
                       </div>
                       {edu.description && (
@@ -518,3 +527,5 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme }) =>
     </div>
   );
 };
+
+

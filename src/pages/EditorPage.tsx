@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useRef } from 'react';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
@@ -27,7 +27,6 @@ import {
   CheckCircle2,
   ArrowUp,
   ArrowDown,
-  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -41,7 +40,7 @@ import { Textarea } from '@/components/common/Textarea';
 import { Modal } from '@/components/common/Modal';
 import { ImageUpload } from '@/components/common/ImageUpload';
 import { slugify } from '@/lib/utils';
-import { extractTextFromPDF, parseResumeText } from '@/lib/resumeParser';
+import { UI_SKILL_SUGGESTIONS } from '@/lib/resumeKeywords';
 
 const LOCAL_STORAGE_PORTFOLIOS_KEY = 'devfolio_portfolios';
 
@@ -56,11 +55,7 @@ const ACCENT_COLORS = [
   { name: 'Teal', hex: '#14b8a6' },
 ];
 
-const SKILL_SUGGESTIONS = [
-  'React', 'TypeScript', 'JavaScript', 'Node.js', 'Next.js', 'Python',
-  'PostgreSQL', 'Docker', 'AWS', 'Tailwind CSS', 'GraphQL', 'Redis',
-  'Git & GitHub', 'REST APIs', 'MongoDB', 'Go', 'Kubernetes', 'Java',
-];
+const SKILL_SUGGESTIONS = UI_SKILL_SUGGESTIONS;
 
 const AVATAR_PRESETS = [
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
@@ -326,7 +321,6 @@ export const EditorPage: React.FC = () => {
     }));
   };
 
-  const [isParsingResume, setIsParsingResume] = useState<boolean>(false);
 
   const handleResumeUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -342,10 +336,7 @@ export const EditorPage: React.FC = () => {
       return;
     }
 
-    setIsParsingResume(true);
-
     try {
-      // 1. Read file as Data URL for instant download link preview
       const base64Data = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result as string);
@@ -353,79 +344,15 @@ export const EditorPage: React.FC = () => {
         reader.readAsDataURL(file);
       });
 
-      // 2. Parse text from PDF and extract details
-      let parsedData: any = {};
-      try {
-        const rawText = await extractTextFromPDF(file);
-        if (rawText && rawText.trim().length > 10) {
-          parsedData = parseResumeText(rawText);
-        }
-      } catch (parseErr) {
-        console.warn('Could not extract text from PDF directly:', parseErr);
-      }
+      updateContent((prev) => ({
+        ...prev,
+        resume: { url: base64Data, filename: file.name },
+      }));
 
-      // 3. Update state with both file attachment AND auto-populated fields
-      updateContent((prev) => {
-        const updatedPersonal = { ...prev.personal };
-        if (parsedData.personal?.fullName) {
-          updatedPersonal.fullName = parsedData.personal.fullName;
-        }
-        if (parsedData.personal?.email) {
-          updatedPersonal.email = parsedData.personal.email;
-        }
-        if (parsedData.personal?.phone) {
-          updatedPersonal.phone = parsedData.personal.phone;
-        }
-        if (parsedData.personal?.title) {
-          updatedPersonal.title = parsedData.personal.title;
-        }
-        if (parsedData.personal?.introduction) {
-          updatedPersonal.introduction = parsedData.personal.introduction;
-        }
-
-        const mergedSkills = parsedData.skills && parsedData.skills.length > 0
-          ? parsedData.skills
-          : prev.skills;
-
-        const updatedSocials = {
-          ...prev.socialLinks,
-          ...(parsedData.socialLinks || {}),
-        };
-
-        const updatedEducation = parsedData.education && parsedData.education.length > 0
-          ? parsedData.education
-          : prev.education;
-
-        return {
-          ...prev,
-          personal: updatedPersonal,
-          about: parsedData.about?.bio ? { bio: parsedData.about.bio } : prev.about,
-          skills: mergedSkills,
-          education: updatedEducation,
-          socialLinks: updatedSocials,
-          resume: { url: base64Data, filename: file.name },
-        };
-      });
-
-      // If user full name was extracted, also update portfolio title & slug
-      if (parsedData.personal?.fullName) {
-        setPortfolio((prev) => {
-          if (!prev) return prev;
-          const newSlug = slugify(parsedData.personal.fullName);
-          return {
-            ...prev,
-            title: `${parsedData.personal.fullName} — Portfolio`,
-            slug: newSlug || prev.slug,
-          };
-        });
-      }
-
-      success('Resume auto-filled successfully!', `Extracted details from "${file.name}" and linked to Download Resume.`);
+      success('Resume uploaded', `"${file.name}" is now linked to Download Resume.`);
     } catch (err: any) {
       console.error('Error handling resume upload:', err);
       toastError('Upload failed', err.message || 'Could not process the uploaded resume.');
-    } finally {
-      setIsParsingResume(false);
     }
   };
 
@@ -544,11 +471,11 @@ export const EditorPage: React.FC = () => {
             />
             {hasUnsavedChanges ? (
               <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                ● Unsaved
+                â— Unsaved
               </span>
             ) : (
               <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 hidden sm:inline">
-                ✓ Saved
+                âœ“ Saved
               </span>
             )}
           </div>
@@ -637,48 +564,6 @@ export const EditorPage: React.FC = () => {
       <div className="flex-1 flex overflow-hidden">
         {/* Left Editor Sidebar */}
         <div className="w-full lg:w-[480px] xl:w-[540px] border-r border-slate-800 bg-slate-950 flex flex-col shrink-0 overflow-hidden">
-          {/* Auto-fill from Resume Banner */}
-          <div className="p-3.5 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border-b border-slate-800 shrink-0">
-            <div className="flex items-start justify-between gap-3">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
-                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                  <span>Auto-Fill from Resume / CV</span>
-                </div>
-                <p className="text-[11px] text-slate-400 leading-tight">
-                  Upload your resume PDF to automatically populate your portfolio and configure your <strong>Download Resume</strong> button.
-                </p>
-              </div>
-
-              <input
-                ref={resumeInputRef}
-                type="file"
-                accept="application/pdf,.pdf"
-                onChange={handleResumeUpload}
-                className="hidden"
-              />
-
-              <Button
-                type="button"
-                variant="primary"
-                size="sm"
-                isLoading={isParsingResume}
-                onClick={() => resumeInputRef.current?.click()}
-                leftIcon={<Upload className="w-3.5 h-3.5" />}
-                className="shrink-0 shadow-sm text-xs py-1 px-2.5"
-              >
-                {isParsingResume ? 'Reading PDF...' : content.resume?.url ? 'Re-upload CV' : 'Upload Resume'}
-              </Button>
-            </div>
-
-            {content.resume?.filename && (
-              <div className="mt-2 flex items-center justify-between text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
-                <span className="truncate">Active CV: {content.resume.filename}</span>
-                <span className="shrink-0 font-mono text-[9px] text-slate-400 ml-2">Linked to Download Resume</span>
-              </div>
-            )}
-          </div>
-
           {/* Section Navigation Tabs */}
           <div className="flex items-center gap-1 p-2 border-b border-slate-800 bg-slate-900/60 flex-wrap shrink-0">
             <button
@@ -886,7 +771,7 @@ export const EditorPage: React.FC = () => {
                         : 'bg-slate-200 text-slate-900 border border-slate-300'
                     }`}
                   >
-                    {themeSettings.darkMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
+                    {themeSettings.darkMode ? 'ðŸŒ™ Dark Mode' : 'â˜€ï¸ Light Mode'}
                   </button>
                 </div>
 
@@ -1091,7 +976,7 @@ export const EditorPage: React.FC = () => {
                           onClick={() => handleRemoveSkill(skill)}
                           className="text-slate-400 hover:text-rose-400 transition-colors ml-1"
                         >
-                          ×
+                          Ã—
                         </button>
                       </span>
                     ))}
@@ -1754,7 +1639,7 @@ export const EditorPage: React.FC = () => {
                     {content.resume?.url && (
                       <button
                         type="button"
-                        onClick={() => updateContent((prev) => ({ ...prev, resume: undefined }))}
+                        onClick={() => updateContent((prev) => ({ ...prev, resume: { url: '', filename: '' } }))}
                         className="p-2 text-slate-500 hover:text-rose-400 transition-colors"
                         aria-label="Delete uploaded resume"
                         title="Delete uploaded resume"
@@ -1869,3 +1754,6 @@ export const EditorPage: React.FC = () => {
     </div>
   );
 };
+
+
+

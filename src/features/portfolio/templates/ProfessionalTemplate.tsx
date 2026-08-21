@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   MapPin,
   Mail,
@@ -19,11 +19,19 @@ interface TemplateProps {
   theme: ThemeSettings;
   isPublic?: boolean;
 }
+export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme, isPublic = false }) => {
+  const personal = content?.personal || { fullName: '', title: '', avatarUrl: '', location: '', email: '', phone: '', introduction: '' };
+  const about = content?.about || { bio: '' };
+  const skills = content?.skills || [];
+  const education = content?.education || [];
+  const projects = content?.projects || [];
+  const experience = content?.experience || [];
+  const certifications = content?.certifications || [];
+  const achievements = content?.achievements || [];
+  const socialLinks = content?.socialLinks || {};
+  const resume = content?.resume || { url: '', filename: '' };
 
-export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
-  const { personal, about, skills, education, projects, experience, certifications, achievements, socialLinks, resume } = content;
-
-  const accentHex = theme.accentColor || '#0284c7';
+  const accentHex = theme?.accentColor || '#0284c7';
   const isLight = !theme.darkMode;
 
   const bgClass = isLight ? 'bg-slate-100 text-slate-900' : 'bg-slate-950 text-slate-100';
@@ -44,7 +52,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
           </div>
 
           <div className="flex items-center gap-2">
-            {resume?.url && (
+            {!isPublic && resume?.url && (
               <a
                 href={resume.url}
                 download={resume.filename || `${personal.fullName || 'developer'}_Resume.pdf`}
@@ -210,7 +218,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
                     </p>
                     <p className="text-slate-400">{edu.institution}</p>
                     <p className="text-[10px] text-slate-500">
-                      {edu.startDate} — {edu.endDate}
+                      {edu.startDate} â€” {edu.endDate}
                     </p>
                     {edu.description && (
                       <p className="text-[11px] text-slate-400 pt-0.5">{edu.description}</p>
@@ -260,7 +268,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
                           </p>
                         </div>
                         <span className="text-xs text-slate-400 font-mono">
-                          {exp.startDate} — {exp.endDate || 'Present'}
+                          {exp.startDate} â€” {exp.endDate || 'Present'}
                         </span>
                       </div>
 
@@ -354,7 +362,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
                   {certifications.map((cert, idx) => (
                     <div key={cert.id || idx} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 text-xs space-y-0.5">
                       <p className="font-semibold text-white">{cert.name}</p>
-                      <p className="text-slate-400 text-[11px]">{cert.issuer} {cert.date ? `• ${cert.date}` : ''}</p>
+                      <p className="text-slate-400 text-[11px]">{cert.issuer} {cert.date ? `â€¢ ${cert.date}` : ''}</p>
                       {cert.credentialUrl && (
                         <a
                           href={cert.credentialUrl}
@@ -384,3 +392,5 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
     </div>
   );
 };
+
+

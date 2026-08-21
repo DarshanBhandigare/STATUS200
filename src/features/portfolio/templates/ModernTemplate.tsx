@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   Sparkles,
   MapPin,
@@ -21,11 +21,19 @@ interface TemplateProps {
   theme: ThemeSettings;
   isPublic?: boolean;
 }
+export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme, isPublic = false }) => {
+  const personal = content?.personal || { fullName: '', title: '', avatarUrl: '', location: '', email: '', phone: '', introduction: '' };
+  const about = content?.about || { bio: '' };
+  const skills = content?.skills || [];
+  const education = content?.education || [];
+  const projects = content?.projects || [];
+  const experience = content?.experience || [];
+  const certifications = content?.certifications || [];
+  const achievements = content?.achievements || [];
+  const socialLinks = content?.socialLinks || {};
+  const resume = content?.resume || { url: '', filename: '' };
 
-export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
-  const { personal, about, skills, education, projects, experience, certifications, achievements, socialLinks, resume } = content;
-
-  const accentHex = theme.accentColor || '#6366f1';
+  const accentHex = theme?.accentColor || '#6366f1';
   const isLight = !theme.darkMode;
 
   const bgClass = isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-slate-100';
@@ -110,7 +118,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
                 </a>
               )}
 
-              {resume?.url && (
+              {!isPublic && resume?.url && (
                 <a
                   href={resume.url}
                   download={resume.filename || `${personal.fullName || 'developer'}_Resume.pdf`}
@@ -350,7 +358,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
                         </div>
                         <span className="text-[11px] text-slate-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3 text-slate-500" />
-                          {exp.startDate} — {exp.endDate || 'Present'}
+                          {exp.startDate} â€” {exp.endDate || 'Present'}
                         </span>
                       </div>
 
@@ -382,7 +390,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
                       </h3>
                       <p className="text-xs text-slate-300">{edu.institution}</p>
                       <p className="text-[11px] text-slate-500">
-                        {edu.startDate} — {edu.endDate}
+                        {edu.startDate} â€” {edu.endDate}
                       </p>
                       {edu.description && (
                         <p className={`text-xs pt-1 ${subtextClass}`}>{edu.description}</p>
@@ -461,3 +469,5 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
     </div>
   );
 };
+
+
