@@ -113,6 +113,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme }) => {
               {resume?.url && (
                 <a
                   href={resume.url}
+                  download={resume.filename || `${personal.fullName || 'developer'}_Resume.pdf`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-slate-700 transition-all hover:scale-105"

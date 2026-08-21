@@ -10,7 +10,6 @@ import {
   Award,
   CheckCircle2,
   FileText,
-  Printer,
 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, TwitterIcon } from '@/components/common/SocialIcons';
 import { PortfolioContent, ThemeSettings } from '@/types/portfolio';
@@ -34,10 +33,6 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
   const sidebarBg = isLight ? 'bg-slate-50 border-r border-slate-200' : 'bg-slate-950/60 border-r border-slate-800/80';
   const subtextClass = isLight ? 'text-slate-600' : 'text-slate-400';
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className={`min-h-full w-full py-8 sm:py-12 px-4 transition-colors duration-200 ${bgClass}`}>
       <div className="max-w-5xl mx-auto space-y-4">
@@ -49,16 +44,10 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print / PDF</span>
-            </button>
             {resume?.url && (
               <a
                 href={resume.url}
+                download={resume.filename || `${personal.fullName || 'developer'}_Resume.pdf`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-sm transition-transform hover:scale-105"
@@ -72,7 +61,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme }
         </div>
 
         {/* Paper Document Layout */}
-        <div className={`rounded-2xl border ${paperClass} overflow-hidden grid grid-cols-1 md:grid-cols-12 print:border-none print:shadow-none`}>
+        <div className={`resume-print-root rounded-2xl border ${paperClass} overflow-hidden grid grid-cols-1 md:grid-cols-12 print:border-none print:shadow-none`}>
           {/* Left Column / Profile & Metadata (4 cols) */}
           <div className={`md:col-span-4 p-6 sm:p-8 space-y-8 ${sidebarBg}`}>
             {/* Avatar & Name */}

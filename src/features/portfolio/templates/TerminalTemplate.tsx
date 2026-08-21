@@ -120,12 +120,13 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme }) =>
                   {resume?.url && (
                     <a
                       href={resume.url}
+                      download={resume.filename || `${personal.fullName || 'developer'}_Resume.pdf`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105"
                     >
                       <Download className="w-3.5 h-3.5" style={{ color: accentHex }} />
-                      <span>Resume.pdf</span>
+                      <span>Download Resume</span>
                     </a>
                   )}
 

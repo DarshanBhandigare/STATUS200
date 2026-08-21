@@ -66,6 +66,43 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
 
+/* Keep generated resumes to one printable A4 sheet. The user can choose
+   "Save as PDF" in the browser print dialog after clicking Download Resume. */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .resume-print-root,
+  .resume-print-root * {
+    visibility: visible !important;
+  }
+
+  .resume-print-root {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: none !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .resume-print-root .print\:hidden {
+    display: none !important;
+  }
+}
+
 /* Existing application screens use slate utilities as their dark palette.
    Remap those utilities when light mode is active so the global toggle changes
    the actual dashboard surface, cards, borders, and text as well as its label. */

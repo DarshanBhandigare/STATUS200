@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useRef } from 'react';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import {
   ArrowLeft,
@@ -26,6 +27,7 @@ import {
   CheckCircle2,
   ArrowUp,
   ArrowDown,
+  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -39,6 +41,7 @@ import { Textarea } from '@/components/common/Textarea';
 import { Modal } from '@/components/common/Modal';
 import { ImageUpload } from '@/components/common/ImageUpload';
 import { slugify } from '@/lib/utils';
+import { extractTextFromPDF, parseResumeText } from '@/lib/resumeParser';
 
 const LOCAL_STORAGE_PORTFOLIOS_KEY = 'devfolio_portfolios';
 
@@ -82,6 +85,7 @@ export const EditorPage: React.FC = () => {
   const [isJsonModalOpen, setIsJsonModalOpen] = useState<boolean>(false);
   const [jsonInput, setJsonInput] = useState<string>('');
   const [skillInput, setSkillInput] = useState<string>('');
+  const resumeInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch Portfolio
   useEffect(() => {
@@ -322,6 +326,98 @@ export const EditorPage: React.FC = () => {
     }));
   };
 
+  const [isParsingResume, setIsParsingResume] = useState<boolean>(false);
+
+  const handleResumeUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) return;
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      toastError('Invalid resume file', 'Please upload a PDF file.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toastError('Resume is too large', 'Please upload a PDF smaller than 10 MB.');
+      return;
+    }
+
+    setIsParsingResume(true);
+
+    try {
+      // 1. Read file as Data URL for instant download link preview
+      const base64Data = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      // 2. Parse text from PDF and extract details
+      let parsedData: any = {};
+      try {
+        const rawText = await extractTextFromPDF(file);
+        if (rawText && rawText.trim().length > 10) {
+          parsedData = parseResumeText(rawText);
+        }
+      } catch (parseErr) {
+        console.warn('Could not extract text from PDF directly:', parseErr);
+      }
+
+      // 3. Update state with both file attachment AND auto-populated fields
+      updateContent((prev) => {
+        const updatedPersonal = { ...prev.personal };
+        if (parsedData.personal?.fullName && (!prev.personal.fullName || prev.personal.fullName === 'Developer Name' || prev.personal.fullName === 'Alex Morgan')) {
+          updatedPersonal.fullName = parsedData.personal.fullName;
+        }
+        if (parsedData.personal?.email && (!prev.personal.email || prev.personal.email.includes('example.com'))) {
+          updatedPersonal.email = parsedData.personal.email;
+        }
+        if (parsedData.personal?.phone && (!prev.personal.phone || prev.personal.phone.includes('555'))) {
+          updatedPersonal.phone = parsedData.personal.phone;
+        }
+        if (parsedData.personal?.title && (!prev.personal.title || prev.personal.title === 'Full Stack Developer')) {
+          updatedPersonal.title = parsedData.personal.title;
+        }
+        if (parsedData.personal?.introduction && !prev.personal.introduction) {
+          updatedPersonal.introduction = parsedData.personal.introduction;
+        }
+
+        const mergedSkills = parsedData.skills && parsedData.skills.length > 0
+          ? Array.from(new Set([...prev.skills, ...parsedData.skills]))
+          : prev.skills;
+
+        return {
+          ...prev,
+          personal: updatedPersonal,
+          about: parsedData.about?.bio ? { bio: parsedData.about.bio } : prev.about,
+          skills: mergedSkills,
+          resume: { url: base64Data, filename: file.name },
+        };
+      });
+
+      // If user full name was extracted, also update portfolio title & slug
+      if (parsedData.personal?.fullName) {
+        setPortfolio((prev) => {
+          if (!prev) return prev;
+          const newSlug = slugify(parsedData.personal.fullName);
+          return {
+            ...prev,
+            title: `${parsedData.personal.fullName} — Portfolio`,
+            slug: newSlug || prev.slug,
+          };
+        });
+      }
+
+      success('Resume uploaded & details filled!', `We extracted details and attached "${file.name}" to Download Resume.`);
+    } catch (err: any) {
+      console.error('Error handling resume upload:', err);
+      toastError('Upload failed', err.message || 'Could not process the uploaded resume.');
+    } finally {
+      setIsParsingResume(false);
+    }
+  };
+
   // Add Education
   const handleAddEducation = () => {
     const newEdu: EducationItem = {
@@ -530,6 +626,48 @@ export const EditorPage: React.FC = () => {
       <div className="flex-1 flex overflow-hidden">
         {/* Left Editor Sidebar */}
         <div className="w-full lg:w-[480px] xl:w-[540px] border-r border-slate-800 bg-slate-950 flex flex-col shrink-0 overflow-hidden">
+          {/* Auto-fill from Resume Banner */}
+          <div className="p-3.5 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border-b border-slate-800 shrink-0">
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Auto-Fill from Resume / CV</span>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-tight">
+                  Upload your resume PDF to automatically populate your portfolio and configure your <strong>Download Resume</strong> button.
+                </p>
+              </div>
+
+              <input
+                ref={resumeInputRef}
+                type="file"
+                accept="application/pdf,.pdf"
+                onChange={handleResumeUpload}
+                className="hidden"
+              />
+
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                isLoading={isParsingResume}
+                onClick={() => resumeInputRef.current?.click()}
+                leftIcon={<Upload className="w-3.5 h-3.5" />}
+                className="shrink-0 shadow-sm text-xs py-1 px-2.5"
+              >
+                {isParsingResume ? 'Reading PDF...' : content.resume?.url ? 'Re-upload CV' : 'Upload Resume'}
+              </Button>
+            </div>
+
+            {content.resume?.filename && (
+              <div className="mt-2 flex items-center justify-between text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                <span className="truncate">Active CV: {content.resume.filename}</span>
+                <span className="shrink-0 font-mono text-[9px] text-slate-400 ml-2">Linked to Download Resume</span>
+              </div>
+            )}
+          </div>
+
           {/* Section Navigation Tabs */}
           <div className="flex items-center gap-1 p-2 border-b border-slate-800 bg-slate-900/60 flex-wrap shrink-0">
             <button
@@ -626,7 +764,7 @@ export const EditorPage: React.FC = () => {
               }`}
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>Socials</span>
+              <span>Socials & Resume</span>
             </button>
           </div>
 
@@ -1514,7 +1652,7 @@ export const EditorPage: React.FC = () => {
 
             {/* TAB: SOCIALS & RESUME */}
             {activeTab === 'social' && (
-              <div className="space-y-4 animate-fadeIn">
+              <div className="flex flex-col space-y-4 animate-fadeIn">
                 <Input
                   label="GitHub Profile URL"
                   placeholder="https://github.com/username"
@@ -1583,20 +1721,40 @@ export const EditorPage: React.FC = () => {
                   }
                 />
 
-                <div className="pt-4 border-t border-slate-800 space-y-3">
+                <div className="order-first pt-4 border-t border-slate-800 space-y-3">
                   <h3 className="text-xs font-bold text-white uppercase">Resume Attachment</h3>
-                  <Input
-                    label="Resume PDF Link / URL"
-                    placeholder="https://example.com/resume.pdf"
-                    value={content.resume?.url || ''}
-                    onChange={(e) =>
-                      updateContent((prev) => ({
-                        ...prev,
-                        resume: { ...prev.resume, url: e.target.value },
-                      }))
-                    }
-                    helperText="Direct download link shown on your public portfolio."
+                  <input
+                    ref={resumeInputRef}
+                    type="file"
+                    accept="application/pdf,.pdf"
+                    onChange={handleResumeUpload}
+                    className="hidden"
                   />
+                  <div className="flex items-center gap-3">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => resumeInputRef.current?.click()}
+                      leftIcon={<Upload className="w-4 h-4" />}
+                    >
+                      {content.resume?.url ? 'Replace Resume' : 'Upload Resume'}
+                    </Button>
+                    {content.resume?.url && (
+                      <button
+                        type="button"
+                        onClick={() => updateContent((prev) => ({ ...prev, resume: undefined }))}
+                        className="p-2 text-slate-500 hover:text-rose-400 transition-colors"
+                        aria-label="Delete uploaded resume"
+                        title="Delete uploaded resume"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    {content.resume?.filename || 'Upload a PDF up to 10 MB. It will appear as Download Resume.'}
+                  </p>
                 </div>
               </div>
             )}
