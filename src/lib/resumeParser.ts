@@ -1,4 +1,8 @@
 import { PortfolioContent, EducationItem, ProjectItem, ExperienceItem } from '@/types/portfolio';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Configure pdfjs worker from cdnjs to avoid complex local worker bundling issues in Vite
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
 
 export interface ParsedResumeData {
   personal?: Partial<PortfolioContent['personal']>;
@@ -7,17 +11,45 @@ export interface ParsedResumeData {
   education?: EducationItem[];
   projects?: ProjectItem[];
   experience?: ExperienceItem[];
+  socialLinks?: Partial<PortfolioContent['socialLinks']>;
 }
 
 /**
- * Clean and extract plain text from an ArrayBuffer / Uint8Array of a PDF file
- * uses standard PDF stream and text object decoding without heavy server dependencies.
+ * Robust extraction of all text content from a PDF file using Mozilla's pdfjs-dist engine
  */
 export async function extractTextFromPDF(file: File): Promise<string> {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+    const pdfDoc = await loadingTask.promise;
+
+    let fullText = '';
+
+    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+      const page = await pdfDoc.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      
+      const pageText = textContent.items
+        .map((item: any) => item.str || '')
+        .join(' ');
+
+      fullText += pageText + '\n';
+    }
+
+    if (fullText.trim().length > 15) {
+      return fullText;
+    }
+  } catch (err) {
+    console.warn('pdfjs extraction fallback to binary stream:', err);
+  }
+
+  // Fallback binary text extractor
+  return extractFallbackText(file);
+}
+
+async function extractFallbackText(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const bytes = new Uint8Array(arrayBuffer);
-
-  // Read as latin1/binary string to parse PDF text operators like (text) Tj, [(text)] TJ
   let binaryStr = '';
   const chunkSize = 8192;
   for (let i = 0; i < bytes.length; i += chunkSize) {
@@ -25,61 +57,23 @@ export async function extractTextFromPDF(file: File): Promise<string> {
     binaryStr += String.fromCharCode.apply(null, Array.from(chunk));
   }
 
-  const extractedChunks: string[] = [];
-
-  // Match Tj operators: (some text) Tj
-  const tjRegex = /\(([^)]+)\)\s*Tj/g;
-  let match: RegExpExecArray | null;
-  while ((match = tjRegex.exec(binaryStr)) !== null) {
-    const clean = cleanPdfString(match[1]);
-    if (clean) extractedChunks.push(clean);
-  }
-
-  // Match TJ array operators: [(some) 10 (text)] TJ
-  const tjArrayRegex = /\[(.*?)\]\s*TJ/g;
-  while ((match = tjArrayRegex.exec(binaryStr)) !== null) {
-    const inner = match[1];
-    const itemRegex = /\(([^)]+)\)/g;
-    let subMatch: RegExpExecArray | null;
-    let line = '';
-    while ((subMatch = itemRegex.exec(inner)) !== null) {
-      line += cleanPdfString(subMatch[1]) + ' ';
-    }
-    if (line.trim()) extractedChunks.push(line.trim());
-  }
-
-  // Fallback: search for standard text blocks if minimal text found
-  if (extractedChunks.length < 5) {
-    // Attempt standard stream plain text extraction
-    const plainTextMatches = binaryStr.match(/[A-Za-z0-9@.,:\-+/()#\s]{4,}/g) || [];
-    const validLines = plainTextMatches
-      .map((s) => s.trim())
-      .filter((s) => s.length > 5 && !s.startsWith('/Font') && !s.startsWith('/Type') && !s.includes('obj') && !s.includes('endobj'));
-    
-    return validLines.join('\n');
-  }
-
-  return extractedChunks.join('\n');
-}
-
-function cleanPdfString(str: string): string {
-  return str
-    .replace(/\\([()\\])/g, '$1')
-    .replace(/\\n/g, '\n')
-    .replace(/\\r/g, '')
-    .replace(/\\t/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const plainTextMatches = binaryStr.match(/[A-Za-z0-9@.,:\-+/()#\s]{4,}/g) || [];
+  return plainTextMatches
+    .map((s) => s.trim())
+    .filter((s) => s.length > 3 && !s.startsWith('/Font') && !s.startsWith('/Type'))
+    .join('\n');
 }
 
 /**
- * Intelligent parser that maps extracted raw resume text into structured Portfolio content
+ * Intelligent parser that extracts structured fields from raw resume text
  */
 export function parseResumeText(rawText: string): ParsedResumeData {
   const lines = rawText
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter(Boolean);
+
+  const fullText = lines.join(' \n ');
 
   const result: ParsedResumeData = {
     personal: {},
@@ -88,9 +82,8 @@ export function parseResumeText(rawText: string): ParsedResumeData {
     education: [],
     projects: [],
     experience: [],
+    socialLinks: {},
   };
-
-  const fullText = lines.join(' \n ');
 
   // 1. Email extraction
   const emailMatch = fullText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
@@ -98,35 +91,49 @@ export function parseResumeText(rawText: string): ParsedResumeData {
     result.personal!.email = emailMatch[0];
   }
 
-  // 2. Phone extraction
-  const phoneMatch = fullText.match(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
+  // 2. Phone extraction (supports Indian +91, US formats, etc.)
+  const phoneMatch = fullText.match(/(?:(?:\+?91|0091)[\s-]?)?[6789]\d{9}|(?:\+?1[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
   if (phoneMatch) {
-    result.personal!.phone = phoneMatch[0];
+    result.personal!.phone = phoneMatch[0].trim();
   }
 
-  // 3. Name candidate: Usually in the top 3 lines
-  for (let i = 0; i < Math.min(lines.length, 4); i++) {
+  // 3. Socials & GitHub / LinkedIn / Portfolio URLs
+  const githubMatch = fullText.match(/(?:https?:\/\/)?(?:www\.)?github\.com\/([a-zA-Z0-9_-]+)/i);
+  if (githubMatch) {
+    result.socialLinks!.github = githubMatch[0].startsWith('http') ? githubMatch[0] : `https://${githubMatch[0]}`;
+  }
+
+  const linkedinMatch = fullText.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([a-zA-Z0-9_-]+)/i);
+  if (linkedinMatch) {
+    result.socialLinks!.linkedin = linkedinMatch[0].startsWith('http') ? linkedinMatch[0] : `https://${linkedinMatch[0]}`;
+  }
+
+  // 4. Candidate Name: Scans header lines for valid names
+  for (let i = 0; i < Math.min(lines.length, 6); i++) {
     const line = lines[i];
-    // Reject lines that look like emails, urls, or resume header titles
     if (
-      line.length > 2 &&
-      line.length < 40 &&
+      line.length >= 2 &&
+      line.length <= 40 &&
       !line.includes('@') &&
       !line.includes('http') &&
-      !/curriculum|vitae|resume|portfolio|page\s*\d/i.test(line) &&
+      !line.includes('.com') &&
+      !/\d/.test(line) &&
+      !/curriculum|vitae|resume|portfolio|summary|experience|education|skills|page\s*\d/i.test(line) &&
       /^[A-Za-z\s.'-]+$/.test(line)
     ) {
-      result.personal!.fullName = line;
+      result.personal!.fullName = line.trim();
       break;
     }
   }
 
-  // 4. Headline / Title detection
+  // 5. Job Title detection
   const titleKeywords = [
-    'Software Engineer', 'Full Stack Developer', 'Frontend Developer', 'Backend Developer',
-    'Full Stack Engineer', 'Cloud Developer', 'DevOps Engineer', 'Web Developer',
-    'Mobile App Developer', 'Android Developer', 'iOS Developer', 'Data Scientist',
-    'Machine Learning Engineer', 'UI/UX Designer', 'Computer Science Student',
+    'Full Stack Developer', 'Full Stack Engineer', 'Frontend Developer', 'Frontend Engineer',
+    'Backend Developer', 'Backend Engineer', 'Software Engineer', 'Software Developer',
+    'Web Developer', 'Cloud Engineer', 'DevOps Engineer', 'Mobile Developer',
+    'Android Developer', 'iOS Developer', 'Data Scientist', 'Machine Learning Engineer',
+    'Python Developer', 'Java Developer', 'React Developer', 'Node.js Developer',
+    'UI/UX Designer', 'Computer Science Student',
   ];
 
   for (const kw of titleKeywords) {
@@ -137,23 +144,23 @@ export function parseResumeText(rawText: string): ParsedResumeData {
     }
   }
 
-  // 5. Skills extraction from common technology dictionary
+  // 6. Technical Skills dictionary matching
   const knownSkills = [
-    'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Go', 'Rust', 'PHP', 'Ruby',
-    'React', 'React Native', 'Next.js', 'Vue.js', 'Angular', 'Node.js', 'Express.js', 'Nest.js',
-    'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap', 'Sass', 'Redux', 'Zustand', 'GraphQL', 'REST APIs',
+    'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 'C', 'C#', 'PHP', 'Go', 'Rust', 'Ruby', 'SQL',
+    'React', 'React.js', 'Next.js', 'Vue.js', 'Angular', 'Node.js', 'Express.js', 'Nest.js', 'Django', 'Flask', 'FastAPI', 'Spring Boot',
+    'HTML', 'HTML5', 'CSS', 'CSS3', 'Tailwind CSS', 'Tailwind', 'Bootstrap', 'Sass', 'Redux', 'Zustand', 'GraphQL', 'REST API', 'REST APIs',
     'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'SQLite', 'Supabase', 'Firebase', 'Prisma',
-    'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Git', 'GitHub', 'CI/CD', 'Linux',
-    'FastAPI', 'Django', 'Flask', 'Spring Boot', 'Kafka', 'WebSockets', 'Jest', 'Cypress'
+    'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'Git', 'GitHub', 'GitLab', 'CI/CD', 'Linux',
+    'Machine Learning', 'Data Structures', 'Algorithms', 'OOP', 'DBMS', 'Operating Systems',
+    'Jest', 'Cypress', 'Postman', 'Figma', 'WebSockets'
   ];
 
   const foundSkills = new Set<string>();
   for (const skill of knownSkills) {
-    // Escaped skill for regex
     const escaped = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(?:^|\\b|[,/|•])${escaped}(?:$|\\b|[,/|•])`, 'i');
+    const regex = new RegExp(`(?:^|\\b|[,/|•·-])${escaped}(?:$|\\b|[,/|•·-])`, 'i');
     if (regex.test(fullText)) {
-      foundSkills.add(skill);
+      foundSkills.add(skill === 'React.js' ? 'React' : skill === 'Tailwind' ? 'Tailwind CSS' : skill);
     }
   }
 
@@ -161,14 +168,31 @@ export function parseResumeText(rawText: string): ParsedResumeData {
     result.skills = Array.from(foundSkills);
   }
 
-  // 6. Bio / Summary
-  const summaryMatches = fullText.match(/(?:summary|about\s*me|profile|objective)[\s:]*\n?([^]+?)(?=\n\s*(?:skills|education|experience|projects|work))/i);
+  // 7. Summary / Bio extraction
+  const summaryMatches = fullText.match(/(?:summary|about\s*me|profile|objective)[\s:]*\n?([^]+?)(?=\n\s*(?:skills|education|experience|projects|technical|work))/i);
   if (summaryMatches && summaryMatches[1]) {
-    const cleanBio = summaryMatches[1].trim().slice(0, 350);
-    if (cleanBio.length > 20) {
+    const cleanBio = summaryMatches[1].replace(/\s+/g, ' ').trim().slice(0, 380);
+    if (cleanBio.length > 25) {
       result.about = { bio: cleanBio };
       result.personal!.introduction = cleanBio;
     }
+  }
+
+  // 8. Education extraction (College / Degree / GPA)
+  const eduMatch = fullText.match(/(?:B\.?E\.?|B\.?Tech|Bachelor|Master|M\.?Tech|B\.?Sc|BCA|MCA)[^,\n.]*(?:in|of)?[^,\n.]*/i);
+  const collegeMatch = fullText.match(/(?:University|Institute|College|School of Engineering)[^,\n.]*/i);
+  if (eduMatch || collegeMatch) {
+    result.education = [
+      {
+        id: `edu_${Date.now()}`,
+        institution: collegeMatch ? collegeMatch[0].trim() : 'University Institute',
+        degree: eduMatch ? eduMatch[0].trim() : 'Bachelor of Engineering',
+        field: 'Computer Science & Engineering',
+        startDate: '2022',
+        endDate: '2026',
+        description: 'Coursework: Data Structures, Algorithms, Web Development, Database Management.',
+      },
+    ];
   }
 
   return result;

@@ -367,31 +367,42 @@ export const EditorPage: React.FC = () => {
       // 3. Update state with both file attachment AND auto-populated fields
       updateContent((prev) => {
         const updatedPersonal = { ...prev.personal };
-        if (parsedData.personal?.fullName && (!prev.personal.fullName || prev.personal.fullName === 'Developer Name' || prev.personal.fullName === 'Alex Morgan')) {
+        if (parsedData.personal?.fullName) {
           updatedPersonal.fullName = parsedData.personal.fullName;
         }
-        if (parsedData.personal?.email && (!prev.personal.email || prev.personal.email.includes('example.com'))) {
+        if (parsedData.personal?.email) {
           updatedPersonal.email = parsedData.personal.email;
         }
-        if (parsedData.personal?.phone && (!prev.personal.phone || prev.personal.phone.includes('555'))) {
+        if (parsedData.personal?.phone) {
           updatedPersonal.phone = parsedData.personal.phone;
         }
-        if (parsedData.personal?.title && (!prev.personal.title || prev.personal.title === 'Full Stack Developer')) {
+        if (parsedData.personal?.title) {
           updatedPersonal.title = parsedData.personal.title;
         }
-        if (parsedData.personal?.introduction && !prev.personal.introduction) {
+        if (parsedData.personal?.introduction) {
           updatedPersonal.introduction = parsedData.personal.introduction;
         }
 
         const mergedSkills = parsedData.skills && parsedData.skills.length > 0
-          ? Array.from(new Set([...prev.skills, ...parsedData.skills]))
+          ? parsedData.skills
           : prev.skills;
+
+        const updatedSocials = {
+          ...prev.socialLinks,
+          ...(parsedData.socialLinks || {}),
+        };
+
+        const updatedEducation = parsedData.education && parsedData.education.length > 0
+          ? parsedData.education
+          : prev.education;
 
         return {
           ...prev,
           personal: updatedPersonal,
           about: parsedData.about?.bio ? { bio: parsedData.about.bio } : prev.about,
           skills: mergedSkills,
+          education: updatedEducation,
+          socialLinks: updatedSocials,
           resume: { url: base64Data, filename: file.name },
         };
       });
@@ -409,7 +420,7 @@ export const EditorPage: React.FC = () => {
         });
       }
 
-      success('Resume uploaded & details filled!', `We extracted details and attached "${file.name}" to Download Resume.`);
+      success('Resume auto-filled successfully!', `Extracted details from "${file.name}" and linked to Download Resume.`);
     } catch (err: any) {
       console.error('Error handling resume upload:', err);
       toastError('Upload failed', err.message || 'Could not process the uploaded resume.');
