@@ -73,6 +73,10 @@ html:not(.dark) .app-theme-surface [class~="bg-slate-950"] {
   background-color: #f8fafc !important;
 }
 
+html:not(.dark) .app-theme-surface.bg-slate-950 {
+  background-color: #f8fafc !important;
+}
+
 html:not(.dark) .app-theme-surface [class*="bg-slate-950/"] {
   background-color: #f8fafc !important;
 }
@@ -81,11 +85,19 @@ html:not(.dark) .app-theme-surface [class~="bg-slate-900"] {
   background-color: #ffffff !important;
 }
 
+html:not(.dark) .app-theme-surface.bg-slate-900 {
+  background-color: #ffffff !important;
+}
+
 html:not(.dark) .app-theme-surface [class*="bg-slate-900/"] {
   background-color: #ffffff !important;
 }
 
 html:not(.dark) .app-theme-surface [class~="bg-slate-800"] {
+  background-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .app-theme-surface.bg-slate-800 {
   background-color: #e2e8f0 !important;
 }
 

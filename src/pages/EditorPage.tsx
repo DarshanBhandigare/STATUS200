@@ -85,13 +85,30 @@ export const EditorPage: React.FC = () => {
   useEffect(() => {
     const fetchPortfolio = async () => {
       setIsLoading(true);
+
+      const loadLocalPortfolio = () => {
+        try {
+          const stored = localStorage.getItem(LOCAL_STORAGE_PORTFOLIOS_KEY);
+          const list: Portfolio[] = stored ? JSON.parse(stored) : DEMO_PORTFOLIOS;
+          const found = list.find((p) => p.id === id);
+          setPortfolio(found || list[0] || DEMO_PORTFOLIOS[0]);
+        } catch (localError) {
+          console.error('Error loading local portfolio:', localError);
+          setPortfolio(DEMO_PORTFOLIOS[0]);
+        }
+      };
+
       try {
         if (isSupabaseConfigured && supabase && user) {
-          const { data, error } = await supabase
-            .from('portfolios')
-            .select('*')
-            .eq('id', id)
-            .single();
+          const query = supabase
+              .from('portfolios')
+              .select('*')
+              .eq('id', id)
+              .single();
+          const timeout = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Portfolio request timed out')), 8000)
+          );
+          const { data, error } = await Promise.race([query, timeout]);
 
           if (error) throw error;
           if (data) {
@@ -108,24 +125,16 @@ export const EditorPage: React.FC = () => {
               createdAt: data.created_at,
               updatedAt: data.updated_at,
             });
+          } else {
+            loadLocalPortfolio();
           }
         } else {
-          // Local Mode
-          const stored = localStorage.getItem(LOCAL_STORAGE_PORTFOLIOS_KEY);
-          let list: Portfolio[] = stored ? JSON.parse(stored) : DEMO_PORTFOLIOS;
-          const found = list.find((p) => p.id === id);
-          if (found) {
-            setPortfolio(found);
-          } else if (list.length > 0) {
-            setPortfolio(list[0]);
-          } else {
-            // fallback to demo portfolio
-            setPortfolio(DEMO_PORTFOLIOS[0]);
-          }
+          loadLocalPortfolio();
         }
       } catch (err: any) {
         console.error('Error fetching portfolio for editor:', err);
-        toastError('Failed to load portfolio', err.message);
+        loadLocalPortfolio();
+        toastError('Using local portfolio data', err.message);
       } finally {
         setIsLoading(false);
       }
