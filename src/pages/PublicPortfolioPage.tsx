@@ -207,6 +207,19 @@ export const PublicPortfolioPage: React.FC = () => {
 
       {/* Floating Bottom Badge */}
       <div className="fixed bottom-4 right-4 sm:right-6 z-50 flex items-center gap-2 print:hidden">
+        {portfolio.content?.resume?.url && (
+          <a
+            href={portfolio.content.resume.url}
+            download={portfolio.content.resume.filename || `${portfolio.title || portfolio.slug || 'portfolio'}-Resume.pdf`}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-violet-600/15 hover:bg-violet-600/25 text-violet-200 hover:text-white border border-violet-500/30 shadow-2xl backdrop-blur-md transition-all hover:scale-105"
+            title="Download Resume"
+            aria-label="Download Resume"
+          >
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline text-xs font-semibold">Download Resume</span>
+          </a>
+        )}
+
         <button
           onClick={handleCopyLink}
           className="p-2.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 shadow-2xl backdrop-blur-md transition-all hover:scale-105"
