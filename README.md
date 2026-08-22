@@ -2,7 +2,7 @@
 
 ### Portfolio Builder
 
-Status 200 is a modern portfolio builder designed for students, junior developers, and freelancers who want to create polished, recruiter-ready public profiles in minutes.
+Status-200 is a modern portfolio builder designed for students, junior developers, and freelancers who want to create polished, recruiter-ready public profiles in minutes.
 
 ---
 
