@@ -25,13 +25,13 @@ Status 200 is a modern portfolio builder designed for students, junior developer
 
 ### Dashboard / Builder View
 
-![Status 200 preview](https://plain-apac-prod-public.komododecks.com/202608/22/A97g1cCkbSmVBnyDdIYn/image.jpg)
+![Status-200 preview](https://plain-apac-prod-public.komododecks.com/202608/22/A97g1cCkbSmVBnyDdIYn/image.jpg)
 
 ---
 
 ## ✨ Features
 
-Status 200 is built to make portfolio creation fast, clean, and professional:
+Status-200 is built to make portfolio creation fast, clean, and professional:
 
 - 📊 Dashboard to manage portfolios
 - 🧩 Create, edit, and organize portfolio content
@@ -61,7 +61,7 @@ Status 200 is built to make portfolio creation fast, clean, and professional:
 
 ## 🎨 Design Philosophy
 
-Status 200 focuses on a clean, premium, and recruiter-friendly experience:
+Status-200 focuses on a clean, premium, and recruiter-friendly experience:
 
 - Minimal but expressive visual language
 - Fast editing workflow
@@ -73,7 +73,7 @@ Status 200 focuses on a clean, premium, and recruiter-friendly experience:
 
 ## 🔐 Security & Data
 
-Status 200 uses Supabase for authentication and portfolio data management.
+Status-200 uses Supabase for authentication and portfolio data management.
 
 - User-specific portfolio content is isolated by account
 - Public pages are generated from structured portfolio data
