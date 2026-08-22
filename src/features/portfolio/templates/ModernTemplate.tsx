@@ -401,12 +401,12 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme, isPubl
               </section>
             )}
 
-            {/* Certifications & Achievements */}
-            {(certifications.length > 0 || achievements.length > 0) && (
+            {/* Certifications */}
+            {certifications.length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5" style={{ color: accentHex }} />
-                  <h2 className="text-xl font-bold font-display text-white">Honors & Certs</h2>
+                  <h2 className="text-xl font-bold font-display text-white">Certifications</h2>
                 </div>
 
                 <div className="space-y-2.5">
@@ -431,6 +431,19 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ content, theme, isPubl
                     </div>
                   ))}
 
+                </div>
+              </section>
+            )}
+
+            {/* Awards & Hackathons */}
+            {achievements.length > 0 && (
+              <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Award className="w-5 h-5" style={{ color: accentHex }} />
+                  <h2 className="text-xl font-bold font-display text-white">Awards & Hackathons</h2>
+                </div>
+
+                <div className="space-y-2.5">
                   {achievements.map((ach, idx) => (
                     <div key={ach.id || idx} className={`p-3.5 rounded-xl border ${cardClass} space-y-1`}>
                       <div className="flex items-start justify-between">

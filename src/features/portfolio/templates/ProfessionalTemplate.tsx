@@ -347,14 +347,14 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme, 
               </section>
             )}
 
-            {/* Certifications & Honors */}
-            {(certifications.length > 0 || achievements.length > 0) && (
+            {/* Certifications */}
+            {certifications.length > 0 && (
               <section className="space-y-4">
                 <h2
                   className="text-xs font-bold uppercase tracking-wider pb-1 border-b flex items-center justify-between"
                   style={{ color: accentHex, borderColor: `${accentHex}40` }}
                 >
-                  <span>Certifications & Honors</span>
+                  <span>Certifications</span>
                   <Award className="w-4 h-4" />
                 </h2>
 
@@ -377,6 +377,22 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ content, theme, 
                     </div>
                   ))}
 
+                </div>
+              </section>
+            )}
+
+            {/* Awards & Hackathons */}
+            {achievements.length > 0 && (
+              <section className="space-y-4">
+                <h2
+                  className="text-xs font-bold uppercase tracking-wider pb-1 border-b flex items-center justify-between"
+                  style={{ color: accentHex, borderColor: `${accentHex}40` }}
+                >
+                  <span>Awards & Hackathons</span>
+                  <Award className="w-4 h-4" />
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {achievements.map((ach, idx) => (
                     <div key={ach.id || idx} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 text-xs space-y-0.5">
                       <p className="font-semibold text-white">{ach.title}</p>
