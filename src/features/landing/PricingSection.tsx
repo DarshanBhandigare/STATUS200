@@ -6,10 +6,11 @@ import { Badge } from '@/components/common/Badge';
 import { useToast } from '@/context/ToastContext';
 import { loadRazorpayScript } from '@/lib/razorpay';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 export const PricingSection: React.FC = () => {
   const navigate = useNavigate();
-  const { user, updateProfile } = useAuth();
+  const { user } = useAuth();
   const { success, error: toastError, info } = useToast();
   const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
 
@@ -41,6 +42,13 @@ export const PricingSection: React.FC = () => {
     setIsProcessingPayment(true);
 
     try {
+      const sessionResult = supabase ? await supabase.auth.getSession() : null;
+      const accessToken = sessionResult?.data.session?.access_token;
+      if (!accessToken) {
+        toastError('Sign in required', 'Your session expired. Please sign in again.');
+        return;
+      }
+
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
         toastError('Payment unavailable', 'Could not load Razorpay checkout.');
@@ -56,6 +64,7 @@ export const PricingSection: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           amount: 5000,
@@ -118,6 +127,7 @@ export const PricingSection: React.FC = () => {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
               },
               body: JSON.stringify(response),
             });
@@ -134,7 +144,6 @@ export const PricingSection: React.FC = () => {
             }
 
             success('Payment successful', 'Your Pro upgrade payment is verified.');
-            await updateProfile({ isPro: true });
           } catch (verifyError) {
             console.error('Payment verify error:', verifyError);
             toastError('Payment verification failed', 'Could not verify payment.');

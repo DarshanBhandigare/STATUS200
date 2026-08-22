@@ -23,14 +23,31 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS custom_domain TEXT UNIQUE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_pro BOOLEAN DEFAULT false NOT NULL;
 
+CREATE OR REPLACE FUNCTION public.prevent_client_pro_changes()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.is_pro IS DISTINCT FROM OLD.is_pro AND auth.role() <> 'service_role' THEN
+    NEW.is_pro := OLD.is_pro;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS protect_profile_pro_status ON public.profiles;
+CREATE TRIGGER protect_profile_pro_status
+  BEFORE UPDATE ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.prevent_client_pro_changes();
+
 -- Enable RLS for profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 -- Profiles Policies
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
 CREATE POLICY "Users can view their own profile"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Public can view profile of published portfolio owners" ON public.profiles;
 CREATE POLICY "Public can view profile of published portfolio owners"
   ON public.profiles FOR SELECT
   USING (
@@ -41,10 +58,12 @@ CREATE POLICY "Public can view profile of published portfolio owners"
     )
   );
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
 CREATE POLICY "Users can insert their own profile"
   ON public.profiles FOR INSERT
   WITH CHECK (auth.uid() = id);
@@ -111,6 +130,7 @@ ALTER TABLE public.portfolios ENABLE ROW LEVEL SECURITY;
 
 -- Portfolios Policies
 -- 1. Read: Users can read their own portfolios (published or draft) OR anyone can read if published
+DROP POLICY IF EXISTS "Portfolios are viewable by owner or publicly if published" ON public.portfolios;
 CREATE POLICY "Portfolios are viewable by owner or publicly if published"
   ON public.portfolios FOR SELECT
   USING (
@@ -118,16 +138,21 @@ CREATE POLICY "Portfolios are viewable by owner or publicly if published"
   );
 
 -- 2. Insert: Authenticated users can insert their own portfolios
+DROP POLICY IF EXISTS "Users can create portfolios" ON public.portfolios;
 CREATE POLICY "Users can create portfolios"
   ON public.portfolios FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- 3. Update: Users can update their own portfolios
+DROP POLICY IF EXISTS "Users can update portfolios" ON public.portfolios;
+DROP POLICY IF EXISTS "Users can update their own portfolios" ON public.portfolios;
 CREATE POLICY "Users can update their own portfolios"
   ON public.portfolios FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- 4. Delete: Users can delete their own portfolios
+DROP POLICY IF EXISTS "Users can delete portfolios" ON public.portfolios;
+DROP POLICY IF EXISTS "Users can delete their own portfolios" ON public.portfolios;
 CREATE POLICY "Users can delete their own portfolios"
   ON public.portfolios FOR DELETE
   USING (auth.uid() = user_id);
@@ -191,10 +216,12 @@ VALUES ('resumes', 'resumes', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Storage Policies
+DROP POLICY IF EXISTS "Public portfolio media access" ON storage.objects;
 CREATE POLICY "Public portfolio media access"
   ON storage.objects FOR SELECT
   USING (bucket_id IN ('portfolios-media', 'resumes'));
 
+DROP POLICY IF EXISTS "Authenticated users can upload media" ON storage.objects;
 CREATE POLICY "Authenticated users can upload media"
   ON storage.objects FOR INSERT
   WITH CHECK (
@@ -202,10 +229,12 @@ CREATE POLICY "Authenticated users can upload media"
     bucket_id IN ('portfolios-media', 'resumes')
   );
 
+DROP POLICY IF EXISTS "Users can update/delete their own uploads" ON storage.objects;
 CREATE POLICY "Users can update/delete their own uploads"
   ON storage.objects FOR UPDATE
   USING (auth.uid() = owner);
 
+DROP POLICY IF EXISTS "Users can delete their own uploads" ON storage.objects;
 CREATE POLICY "Users can delete their own uploads"
   ON storage.objects FOR DELETE
   USING (auth.uid() = owner);
