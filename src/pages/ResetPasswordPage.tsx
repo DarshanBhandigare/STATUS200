@@ -6,6 +6,7 @@ import { useToast } from '@/context/ToastContext';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
 import { supabase } from '@/lib/supabase';
+import { Seo } from '@/components/common/Seo';
 
 export const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -76,6 +77,12 @@ export const ResetPasswordPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative selection:bg-emerald-500 selection:text-slate-950">
+      <Seo
+        title="Set New Password"
+        description="Set a new password for your Status 200 account."
+        canonicalPath="/auth/reset-password"
+        noindex
+      />
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -104,14 +111,14 @@ export const ResetPasswordPage: React.FC = () => {
               <div>
                 <p className="text-white font-semibold text-sm mb-1">Password updated!</p>
                 <p className="text-slate-400 text-xs">
-                  Redirecting you to sign in…
+                  Redirecting you to sign in...
                 </p>
               </div>
             </div>
           ) : !isReady ? (
             <div className="flex flex-col items-center gap-3 py-6 text-center">
               <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-              <p className="text-slate-400 text-xs">Verifying your reset link…</p>
+              <p className="text-slate-400 text-xs">Verifying your reset link...</p>
             </div>
           ) : (
             <>
@@ -126,7 +133,7 @@ export const ResetPasswordPage: React.FC = () => {
                 <Input
                   label="New Password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
+                  placeholder="||||||||"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -150,7 +157,7 @@ export const ResetPasswordPage: React.FC = () => {
                 <Input
                   label="Confirm New Password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
+                  placeholder="||||||||"
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);

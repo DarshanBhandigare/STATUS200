@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
 import { isValidEmail } from '@/lib/utils';
+import { Seo } from '@/components/common/Seo';
 
 export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -43,6 +44,12 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative selection:bg-emerald-500 selection:text-slate-950">
+      <Seo
+        title="Reset Password"
+        description="Request a secure password reset link for your Status 200 account."
+        canonicalPath="/forgot-password"
+        noindex
+      />
       {/* Ambient glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 

@@ -28,8 +28,8 @@ export const HeroSection: React.FC = () => {
           <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-subtle">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
-              <span className="font-medium text-emerald-600 dark:text-emerald-400">Tailored for CS & IT Students</span>
-              <span className="text-slate-400 dark:text-slate-600">•</span>
+              <span className="font-medium text-emerald-600 dark:text-emerald-400">AI profile builder for CS & IT students</span>
+              <span className="text-slate-400 dark:text-slate-600">|</span>
               <span>Internship Ready</span>
             </div>
 
@@ -38,7 +38,7 @@ export const HeroSection: React.FC = () => {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Create a professional developer portfolio in minutes — no coding required. Stand out to tech recruiters and land high-impact internships.
+              Create a professional developer portfolio in minutes - no coding required. Stand out to tech recruiters and land high-impact internships.
             </p>
 
             {/* CTAs */}
@@ -130,7 +130,7 @@ export const HeroSection: React.FC = () => {
                       Full Stack & Cloud Developer
                     </p>
                     <p className="text-[11px] text-slate-400 mt-0.5 truncate">
-                      B.Sc Computer Science @ XYZ University • Graduating 2026
+                      B.Sc Computer Science @ XYZ University | Graduating 2026
                     </p>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export const HeroSection: React.FC = () => {
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <h4 className="text-xs font-semibold text-slate-200">
-                            PulseFlow — Systems Monitor
+                            PulseFlow - Systems Monitor
                           </h4>
                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-emerald-400 border border-slate-700">
                             Featured
@@ -208,7 +208,7 @@ export const HeroSection: React.FC = () => {
                     <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-start justify-between gap-3">
                       <div className="space-y-1">
                         <h4 className="text-xs font-semibold text-slate-200">
-                          AlgoCanvas — Algorithm Visualizer
+                          AlgoCanvas - Algorithm Visualizer
                         </h4>
                         <p className="text-[11px] text-slate-400 line-clamp-1">
                           Interactive graph traversal and pathfinding visualizer with canvas animations.

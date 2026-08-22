@@ -46,7 +46,7 @@ export const DEMO_PORTFOLIO_CONTENT: PortfolioContent = {
   projects: [
     {
       id: 'proj-1',
-      name: 'PulseFlow — Real-Time Systems Monitor',
+      name: 'PulseFlow - Real-Time Systems Monitor',
       description:
         'A high-performance observability dashboard built for microservices. Features real-time WebSocket metrics streaming, CPU/memory threshold alerting, and customizable incident log graphs.',
       technologies: ['TypeScript', 'React', 'Node.js', 'WebSockets', 'Tailwind CSS', 'Redis'],
@@ -57,7 +57,7 @@ export const DEMO_PORTFOLIO_CONTENT: PortfolioContent = {
     },
     {
       id: 'proj-2',
-      name: 'AlgoCanvas — Algorithm Visualizer',
+      name: 'AlgoCanvas - Algorithm Visualizer',
       description:
         'Interactive learning tool that visualizes pathfinding (A*, Dijkstra) and sorting algorithms step-by-step with customizable execution speed and grid obstacle painting.',
       technologies: ['React', 'TypeScript', 'Canvas API', 'Tailwind CSS', 'Zustand'],
@@ -68,7 +68,7 @@ export const DEMO_PORTFOLIO_CONTENT: PortfolioContent = {
     },
     {
       id: 'proj-3',
-      name: 'QuickDocs — Instant Markdown Knowledgebase',
+      name: 'QuickDocs - Instant Markdown Knowledgebase',
       description:
         'Blazing-fast documentation search and publishing engine with full-text fuzzy search, instant syntax highlighting, and automated table-of-contents generation.',
       technologies: ['Next.js', 'PostgreSQL', 'Prisma', 'Tailwind CSS', 'Algolia'],
@@ -117,7 +117,7 @@ export const DEMO_PORTFOLIO_CONTENT: PortfolioContent = {
   achievements: [
     {
       id: 'ach-1',
-      title: '1st Place Winner — HackTheNorth Collegiate Track',
+      title: '1st Place Winner - HackTheNorth Collegiate Track',
       description:
         'Built an AI-assisted accessible code review terminal assistant within 36 hours among 120 participating student teams.',
       date: 'Oct 2025',
@@ -146,7 +146,7 @@ export const DEMO_PORTFOLIOS: Portfolio[] = [
   {
     id: 'demo-portfolio-1',
     userId: 'demo-user-id',
-    title: 'Alex Morgan — Software Engineer 2026',
+    title: 'Alex Morgan - Software Engineer 2026',
     slug: 'alex-morgan',
     template: 'minimal',
     themeSettings: {
@@ -163,7 +163,7 @@ export const DEMO_PORTFOLIOS: Portfolio[] = [
   {
     id: 'demo-portfolio-2',
     userId: 'demo-user-id',
-    title: 'Alex Morgan — Creative Frontend & UI',
+    title: 'Alex Morgan - Creative Frontend & UI',
     slug: 'alex-frontend',
     template: 'modern',
     themeSettings: {

@@ -18,6 +18,7 @@ import { PortfolioRenderer } from '@/features/portfolio/templates/PortfolioRende
 import { DEFAULT_THEME_SETTINGS, EMPTY_PORTFOLIO_CONTENT } from '@/features/portfolio/defaults';
 import { Button } from '@/components/common/Button';
 import { useToast } from '@/context/ToastContext';
+import { Seo } from '@/components/common/Seo';
 
 const LOCAL_STORAGE_PORTFOLIOS_KEY = 'devfolio_portfolios';
 
@@ -145,6 +146,12 @@ export const PublicPortfolioPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-400 flex flex-col items-center justify-center space-y-4">
+        <Seo
+          title="Loading Portfolio"
+          description="Loading a public developer portfolio on Status 200."
+          canonicalPath={slug ? `/p/${slug}` : '/'}
+          noindex
+        />
         <RefreshCw className="w-8 h-8 animate-spin text-emerald-400" />
         <p className="text-xs font-mono">Loading developer portfolio...</p>
       </div>
@@ -154,6 +161,12 @@ export const PublicPortfolioPage: React.FC = () => {
   if (error || !portfolio) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 text-center">
+        <Seo
+          title="Portfolio Not Found"
+          description="The requested public portfolio could not be found."
+          canonicalPath={slug ? `/p/${slug}` : '/'}
+          noindex
+        />
         <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-rose-400 mb-6 shadow-glow">
           <AlertCircle className="w-8 h-8" />
         </div>
@@ -182,6 +195,12 @@ export const PublicPortfolioPage: React.FC = () => {
   if (!portfolio.isPublished) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 text-center">
+        <Seo
+          title={portfolio.title || 'Draft Portfolio'}
+          description="This portfolio is private and not available to search engines."
+          canonicalPath={slug ? `/p/${slug}` : '/'}
+          noindex
+        />
         <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-400 mb-6 shadow-subtle">
           <Lock className="w-8 h-8" />
         </div>
@@ -209,6 +228,15 @@ export const PublicPortfolioPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative">
+      <Seo
+        title={`${portfolio.title} - Developer Portfolio`}
+        description={
+          portfolio.content.personal.introduction ||
+          portfolio.content.about.bio ||
+          `Explore ${portfolio.content.personal.fullName || portfolio.title}'s developer portfolio on Status 200.`
+        }
+        canonicalPath={slug ? `/p/${slug}` : '/'}
+      />
       <main className="flex-1">
         <PortfolioRenderer
           content={portfolio.content}

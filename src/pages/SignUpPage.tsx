@@ -17,6 +17,7 @@ import { useToast } from '@/context/ToastContext';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
 import { isValidEmail } from '@/lib/utils';
+import { Seo } from '@/components/common/Seo';
 
 export const SignUpPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
@@ -95,6 +96,12 @@ export const SignUpPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative selection:bg-emerald-500 selection:text-slate-950">
+      <Seo
+        title="Create Account"
+        description="Create your Status 200 account and build a public developer portfolio."
+        canonicalPath="/signup"
+        noindex
+      />
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -189,7 +196,7 @@ export const SignUpPage: React.FC = () => {
             <Input
               label="Password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="••••••••"
+              placeholder="||||||||"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -213,7 +220,7 @@ export const SignUpPage: React.FC = () => {
             <Input
               label="Confirm Password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="••••••••"
+              placeholder="||||||||"
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
