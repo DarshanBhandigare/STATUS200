@@ -8,7 +8,6 @@ export const Footer: React.FC = () => {
     <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-sm transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-          {/* Brand Column */}
           <div className="col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center shadow-glow">
@@ -17,7 +16,8 @@ export const Footer: React.FC = () => {
               <span className="font-display font-bold text-lg text-slate-900 dark:text-white">Status 200</span>
             </Link>
             <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
-              The modern portfolio builder designed specifically for computer science students, junior developers, and tech interns. Build and publish a recruiter-ready portfolio in minutes without coding.
+              The modern portfolio builder designed specifically for computer science students, junior developers,
+              and tech interns. Build and publish a recruiter-ready portfolio in minutes without coding.
             </p>
             <div className="flex items-center gap-4 pt-2">
               <a
@@ -50,7 +50,6 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Product Links */}
           <div>
             <h4 className="font-semibold text-xs uppercase tracking-wider text-slate-800 dark:text-slate-200 mb-3">
               Product
@@ -79,7 +78,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Templates */}
           <div>
             <h4 className="font-semibold text-xs uppercase tracking-wider text-slate-800 dark:text-slate-200 mb-3">
               Templates
@@ -106,7 +104,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Legal / Company */}
           <div>
             <h4 className="font-semibold text-xs uppercase tracking-wider text-slate-800 dark:text-slate-200 mb-3">
               Legal & About
@@ -123,17 +120,21 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <span className="text-slate-500 dark:text-slate-400">Privacy Policy</span>
+                <Link to="/privacy-policy" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <span className="text-slate-500 dark:text-slate-400">Terms of Service</span>
+                <Link to="/terms-of-service" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+                  Terms of Service
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 pt-6 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Status 200. Crafted for future engineers & developers.</p>
+          <p>(c) {new Date().getFullYear()} Status 200. Crafted for future engineers and developers.</p>
           <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
             <span>Built with precision for students worldwide</span>
           </div>

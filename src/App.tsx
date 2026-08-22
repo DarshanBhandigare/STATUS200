@@ -10,6 +10,8 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { AuthCallbackPage } from './pages/AuthCallbackPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsOfServicePage } from './pages/TermsOfServicePage';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 function RootRoute() {
@@ -33,6 +35,8 @@ export function App() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+      <Route path="/terms-of-service" element={<TermsOfServicePage />} />
 
       <Route path="/p/:slug" element={<PublicPortfolioPage />} />
       <Route path="/portfolio/:slug" element={<PublicPortfolioPage />} />
