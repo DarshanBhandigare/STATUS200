@@ -95,12 +95,9 @@ Status 200 uses Supabase for authentication and portfolio data management.
 
 ## 📬 Contact
 
-- 📧 Email: your-email@example.com
-- 💼 LinkedIn: your-linkedin-url
-- 🌐 Portfolio: your-portfolio-url
+- 📧 Email: bhandigaredarshan@gmail.com
+- 💼 LinkedIn: https://www.linkedin.com/in/darshanbhandigare/
+- 🌐 Portfolio: https://darshanbhandigare.github.io/
 
 ---
 
-## 📄 License
-
-Add your license here.
