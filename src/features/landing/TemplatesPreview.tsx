@@ -20,16 +20,16 @@ export const TemplatesPreview: React.FC = () => {
       name: 'Minimalist Terminal',
       tag: 'Developer Focus',
       description:
-        'Inspired by modern terminal aesthetics and clean typography. Highly favored by engineering managers who appreciate concise technical clarity.',
+        'Inspired by modern terminal aesthetics and clean typography. Ideal for engineering managers who appreciate concise technical clarity.',
       accent: 'emerald',
-      features: ['Monochrome & high contrast', 'Dense project listing', 'Terminal command header style'],
+      features: ['Monochrome high contrast', 'Dense project listing', 'Terminal-style header'],
     },
     {
       id: 'modern' as const,
       name: 'Modern Visual',
       tag: 'Project Heavy',
       description:
-        'Vibrant card-based presentation optimized for full-stack and frontend developers who want rich project screenshots, live demo tags, and tech badges.',
+        'Vibrant card-based presentation for full-stack and frontend developers who want richer screenshots, live demo tags, and tech badges.',
       accent: 'indigo',
       features: ['Card grid layout', 'Visual technology badges', 'Interactive live preview buttons'],
     },
@@ -38,9 +38,9 @@ export const TemplatesPreview: React.FC = () => {
       name: 'Professional Recruiter',
       tag: 'Corporate & Internship',
       description:
-        'Structured two-column executive format crafted specifically for campus recruiting, enterprise software roles, and PDF resume synergy.',
+        'Structured two-column format crafted for campus recruiting, enterprise roles, and PDF resume workflows.',
       accent: 'sky',
-      features: ['Two-column resume flow', 'Education & GPA showcase', 'Verified credentials badge'],
+      features: ['Two-column resume flow', 'Education and GPA showcase', 'Verified credentials badge'],
     },
   ];
 
@@ -59,7 +59,6 @@ export const TemplatesPreview: React.FC = () => {
           </p>
         </div>
 
-        {/* Template Selector Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
           {templates.map((tmpl) => (
             <button
@@ -79,9 +78,7 @@ export const TemplatesPreview: React.FC = () => {
           ))}
         </div>
 
-        {/* Active Template Showcase Display */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm transition-colors">
-          {/* Template Info (Left 5 cols) */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
               <Badge variant="purple" size="sm">
@@ -119,35 +116,32 @@ export const TemplatesPreview: React.FC = () => {
                 Use this Template
               </Button>
               <a
-                href={`/p/alex-morgan`}
+                href="/p/alex-morgan"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition-colors"
               >
-                <span>Live Interactive Demo</span>
+                <span>View live demo</span>
               </a>
             </div>
           </div>
 
-          {/* Realistic Template Simulation Frame (Right 7 cols) */}
           <div className="lg:col-span-7">
             <div className="rounded-xl border border-slate-800 bg-slate-950 p-5 shadow-2xl space-y-4">
-              {/* Browser toolbar */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-800 text-[11px] font-mono text-slate-500">
                 <span>template_preview: {selected}.theme</span>
-                <span className="text-emerald-400">● Ready to deploy</span>
+                <span className="text-emerald-400">Ready to deploy</span>
               </div>
 
-              {/* Minimal Terminal Template Mock */}
               {selected === 'minimal' && (
                 <div className="space-y-4 animate-fadeIn font-mono text-xs">
                   <div className="p-3 rounded-lg bg-slate-900/90 border border-slate-800">
                     <span className="text-emerald-400">$ whoami</span>
                     <h4 className="text-sm font-bold text-slate-100 mt-1 font-sans">
-                      Alex Morgan — Software Developer
+                      Alex Morgan - Software Developer
                     </h4>
                     <p className="text-slate-400 font-sans text-xs mt-1">
-                      Building distributed systems & developer tools. CS @ XYZ University.
+                      Building distributed systems and developer tools. CS @ XYZ University.
                     </p>
                   </div>
 
@@ -166,7 +160,6 @@ export const TemplatesPreview: React.FC = () => {
                 </div>
               )}
 
-              {/* Modern Visual Template Mock */}
               {selected === 'modern' && (
                 <div className="space-y-4 animate-fadeIn text-xs">
                   <div className="flex items-center gap-3">
@@ -185,7 +178,7 @@ export const TemplatesPreview: React.FC = () => {
                         UI Preview
                       </div>
                       <p className="font-semibold text-slate-200 text-xs">AlgoCanvas</p>
-                      <p className="text-[10px] text-slate-400">Interactive Algorithm visualizer</p>
+                      <p className="text-[10px] text-slate-400">Interactive algorithm visualizer</p>
                     </div>
                     <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
                       <div className="h-16 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-[10px]">
@@ -198,7 +191,6 @@ export const TemplatesPreview: React.FC = () => {
                 </div>
               )}
 
-              {/* Professional Recruiter Template Mock */}
               {selected === 'professional' && (
                 <div className="space-y-4 animate-fadeIn text-xs">
                   <div className="pb-3 border-b border-slate-800 flex items-start justify-between">
@@ -211,7 +203,7 @@ export const TemplatesPreview: React.FC = () => {
                       </p>
                     </div>
                     <div className="text-right text-[11px] text-slate-400">
-                      <p>XYZ University • 3.85 GPA</p>
+                      <p>XYZ University | 3.85 GPA</p>
                       <p className="text-emerald-400">Available Summer 2026</p>
                     </div>
                   </div>
@@ -224,7 +216,7 @@ export const TemplatesPreview: React.FC = () => {
                     <div className="col-span-8 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 space-y-1 text-[11px]">
                       <p className="font-semibold text-slate-300">Engineering Internship</p>
                       <p className="text-slate-400">
-                        Apex Cloud Solutions — Optimized SQL latency by 35% across 50k requests/day.
+                        Apex Cloud Solutions - Optimized SQL latency by 35% across 50k requests/day.
                       </p>
                     </div>
                   </div>

@@ -249,6 +249,9 @@ export const PricingSection: React.FC = () => {
               >
                 Get Started Free
               </Button>
+              <p className="mt-3 text-[11px] text-center text-slate-500 dark:text-slate-400">
+                No credit card required. Upgrade later only if you want a custom slug and premium features.
+              </p>
             </div>
           </div>
 
@@ -318,6 +321,11 @@ export const PricingSection: React.FC = () => {
                   Upgrade to Pro
                 </span>
               </Button>
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+                <span>No subscription</span>
+                <span>Secure Razorpay checkout</span>
+                <span>One-time payment</span>
+              </div>
             </div>
           </div>
         </div>

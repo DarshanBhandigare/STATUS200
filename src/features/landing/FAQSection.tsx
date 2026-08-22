@@ -13,6 +13,21 @@ const FAQS = [
       'Yes. Status 200 works like an AI profile builder for developer portfolios by guiding you through your bio, projects, skills, and experience so the final profile is structured, clear, and recruiter-friendly.',
   },
   {
+    question: 'Do I need to pay to get started?',
+    answer:
+      'No. You can start on the free plan and publish a portfolio without paying first. The Pro upgrade is only for people who want a custom slug and the extra premium features.',
+  },
+  {
+    question: 'Is the Pro upgrade a subscription?',
+    answer:
+      'No. Pro is a one-time payment, so you upgrade once and keep the premium benefits without recurring billing.',
+  },
+  {
+    question: 'Can I change templates later?',
+    answer:
+      'Yes. You can switch between templates after creating your portfolio, and your existing content refits automatically.',
+  },
+  {
     question: 'How do I get my profile to appear on Google?',
     answer:
       'Publish your portfolio, use a clean slug, add descriptive project titles, and keep the page indexable. Status 200 includes those SEO basics so public profiles can be crawled by Google.',

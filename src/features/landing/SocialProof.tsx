@@ -6,7 +6,7 @@ export const SocialProof: React.FC = () => {
     {
       icon: <GraduationCap className="w-5 h-5 text-emerald-400" />,
       title: 'Built for Students & Juniors',
-      description: 'Structured to highlight coursework, academic projects, and self-taught codebases.',
+      description: 'Structured to highlight coursework, academic projects, internships, and self-taught codebases.',
     },
     {
       icon: <Zap className="w-5 h-5 text-amber-400" />,
@@ -15,13 +15,13 @@ export const SocialProof: React.FC = () => {
     },
     {
       icon: <Smartphone className="w-5 h-5 text-sky-400" />,
-      title: '100% Mobile & Recruiter Ready',
-      description: 'Engineered to load fast and look stunning on recruiters’ smartphones and laptops.',
+      title: 'Mobile & Recruiter Ready',
+      description: "Engineered to load fast and look polished on recruiters' phones, laptops, and tablets.",
     },
     {
       icon: <ShieldCheck className="w-5 h-5 text-purple-400" />,
-      title: 'Standard Clean URL',
-      description: 'Get an instant clean public link like status-200.vercel.app/p/yourname to paste directly on resumes.',
+      title: 'Clean Shareable URL',
+      description: 'Get a public link like status-200.vercel.app/p/yourname that you can paste directly on resumes.',
     },
   ];
 

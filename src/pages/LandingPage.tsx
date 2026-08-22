@@ -51,11 +51,59 @@ export const LandingPage: React.FC = () => {
               },
               {
                 '@type': 'Question',
+                name: 'Do I need to pay to get started?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. You can start on the free plan and publish a portfolio without paying first.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Is the Pro upgrade a subscription?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. Pro is a one-time payment, so you upgrade once and keep the premium benefits without recurring billing.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Can I change templates later?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes. You can switch between templates after creating your portfolio, and your content refits automatically.',
+                },
+              },
+              {
+                '@type': 'Question',
                 name: 'How can I get my portfolio on Google?',
                 acceptedAnswer: {
                   '@type': 'Answer',
                   text: 'Publish the portfolio, keep the page public, and use descriptive titles and metadata so Google can crawl and index the page.',
                 },
+              },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: 'Status 200',
+            applicationCategory: 'BusinessApplication',
+            operatingSystem: 'Web',
+            description:
+              'An AI profile builder for developer portfolios that helps students and junior developers publish recruiter-ready public pages.',
+            url: 'https://status-200.vercel.app/',
+            offers: [
+              {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'INR',
+                category: 'Free plan',
+              },
+              {
+                '@type': 'Offer',
+                price: '50',
+                priceCurrency: 'INR',
+                category: 'Pro one-time upgrade',
               },
             ],
           },
