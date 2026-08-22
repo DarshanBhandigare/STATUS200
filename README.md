@@ -1,6 +1,6 @@
-# 🚀 Status 200
+# 🚀 Status-200
 
-### *AI Profile Builder for Developer Portfolios*
+### Portfolio Builder
 
 Status 200 is a modern portfolio builder designed for students, junior developers, and freelancers who want to create polished, recruiter-ready public profiles in minutes.
 
