@@ -80,7 +80,7 @@ export const SignUpPage: React.FC = () => {
       if (error) {
         setAuthError(error.message || 'Failed to create account. Please try again.');
       } else {
-        success('Account Created!', 'Welcome to Status 200. Let us build your portfolio!');
+        success('Account Created!', 'Welcome to Status-200. Let us build your portfolio!');
         navigate('/dashboard', { replace: true });
       }
     } finally {
@@ -90,7 +90,7 @@ export const SignUpPage: React.FC = () => {
 
   const handleDemoLogin = () => {
     signInAsDemoUser();
-    success('Demo Account Loaded', 'Welcome to Status 200!');
+    success('Demo Account Loaded', 'Welcome to Status-200!');
     navigate('/dashboard', { replace: true });
   };
 
@@ -98,7 +98,7 @@ export const SignUpPage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative selection:bg-emerald-500 selection:text-slate-950">
       <Seo
         title="Create Account"
-        description="Create your Status 200 account and build a public developer portfolio."
+        description="Create your Status-200 account and build a public developer portfolio."
         canonicalPath="/signup"
         noindex
       />
@@ -109,10 +109,10 @@ export const SignUpPage: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform">
             <Sparkles className="w-5 h-5 text-slate-950 stroke-[2.5]" />
           </div>
-          <span className="font-display font-bold text-2xl text-white">Status 200</span>
+          <span className="font-display font-bold text-2xl text-white">Status-200</span>
         </Link>
         <h2 className="text-2xl font-display font-bold text-white tracking-tight">
-          Create your Status 200 account
+          Create your Status-200 account
         </h2>
         <p className="mt-1.5 text-xs sm:text-sm text-slate-400">
           Build and publish your developer portfolio in minutes.

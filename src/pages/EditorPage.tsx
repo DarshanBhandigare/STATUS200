@@ -824,7 +824,7 @@ export const EditorPage: React.FC = () => {
                         },
                       }))
                     }
-                    helperText="Appears in terminal prompts (e.g. username@status200:~$)"
+                    helperText="Appears in terminal prompts (e.g. username@status-200:~$)"
                   />
                 </div>
 
@@ -1759,6 +1759,5 @@ export const EditorPage: React.FC = () => {
     </div>
   );
 };
-
 
 

@@ -21,7 +21,7 @@ export const supabase: SupabaseClient | null = isSupabaseConfigured
 
 if (!isSupabaseConfigured) {
   console.info(
-    '%c[Status 200] Supabase credentials not detected in .env. Running in interactive Demo / Local Mode with simulated persistent state.',
+    '%c[Status-200] Supabase credentials not detected in .env. Running in interactive Demo / Local Mode with simulated persistent state.',
     'color: #10b981; font-weight: bold;'
   );
 }

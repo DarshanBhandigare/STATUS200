@@ -148,7 +148,7 @@ export const PublicPortfolioPage: React.FC = () => {
       <div className="min-h-screen bg-slate-950 text-slate-400 flex flex-col items-center justify-center space-y-4">
         <Seo
           title="Loading Portfolio"
-          description="Loading a public developer portfolio on Status 200."
+          description="Loading a public developer portfolio on Status-200."
           canonicalPath={slug ? `/p/${slug}` : '/'}
           noindex
         />
@@ -218,7 +218,7 @@ export const PublicPortfolioPage: React.FC = () => {
           </Link>
           <Link to="/">
             <Button variant="ghost" size="md">
-              Back to Status 200
+              Back to Status-200
             </Button>
           </Link>
         </div>
@@ -233,7 +233,7 @@ export const PublicPortfolioPage: React.FC = () => {
         description={
           portfolio.content.personal.introduction ||
           portfolio.content.about.bio ||
-          `Explore ${portfolio.content.personal.fullName || portfolio.title}'s developer portfolio on Status 200.`
+          `Explore ${portfolio.content.personal.fullName || portfolio.title}'s developer portfolio on Status-200.`
         }
         canonicalPath={slug ? `/p/${slug}` : '/'}
       />
@@ -277,7 +277,7 @@ export const PublicPortfolioPage: React.FC = () => {
             <div className="w-5 h-5 rounded-lg bg-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-glow">
               <Sparkles className="w-3 h-3 text-slate-950 stroke-[2.5]" />
             </div>
-            <span className="font-display">Built with Status 200</span>
+            <span className="font-display">Built with Status-200</span>
           </Link>
         )}
       </div>

@@ -79,7 +79,7 @@ export const ResetPasswordPage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative selection:bg-emerald-500 selection:text-slate-950">
       <Seo
         title="Set New Password"
-        description="Set a new password for your Status 200 account."
+        description="Set a new password for your Status-200 account."
         canonicalPath="/auth/reset-password"
         noindex
       />
@@ -90,7 +90,7 @@ export const ResetPasswordPage: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform">
             <Sparkles className="w-5 h-5 text-slate-950 stroke-[2.5]" />
           </div>
-          <span className="font-display font-bold text-2xl text-white">Status 200</span>
+          <span className="font-display font-bold text-2xl text-white">Status-200</span>
         </Link>
         <h2 className="text-2xl font-display font-bold text-white tracking-tight">
           Set a new password

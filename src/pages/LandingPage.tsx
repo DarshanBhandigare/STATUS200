@@ -16,15 +16,25 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950 transition-colors duration-200">
       <Seo
-        title="Status 200 - AI Profile Builder for Developer Portfolios"
-        description="Build a developer portfolio in minutes with Status 200, an AI profile builder for students, junior developers, and freelancers."
+        title="Status-200 | Status 200 - AI Profile Builder for Developer Portfolios"
+        description="Build a developer portfolio in minutes with Status-200, also searched as Status 200, an AI profile builder for students, junior developers, and freelancers."
         canonicalPath="/"
         imagePath={heroImage}
+        keywords={[
+          'Status-200',
+          'Status 200',
+          'Status 200 portfolio builder',
+          'Status-200 portfolio builder',
+          'AI profile builder',
+          'developer portfolio builder',
+          'student portfolio builder',
+        ]}
         structuredData={[
           {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'Status 200',
+            name: 'Status-200',
+            alternateName: ['Status 200', 'Status200'],
             url: 'https://status-200.vercel.app/',
             description:
               'AI profile builder for developer portfolios, students, junior developers, and freelancers.',
@@ -35,18 +45,18 @@ export const LandingPage: React.FC = () => {
             mainEntity: [
               {
                 '@type': 'Question',
-                name: 'What is Status 200?',
+                name: 'What is Status-200?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'Status 200 is a developer portfolio builder that helps you publish a searchable public profile without writing custom code.',
+                  text: 'Status-200 is a developer portfolio builder that helps you publish a searchable public profile without writing custom code.',
                 },
               },
               {
                 '@type': 'Question',
-                name: 'Is Status 200 an AI profile builder?',
+                name: 'Is Status-200 an AI profile builder?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'Yes. Status 200 guides you through the information needed to create a polished AI profile builder experience for your public portfolio.',
+                  text: 'Yes. Status-200 guides you through the information needed to create a polished AI profile builder experience for your public portfolio.',
                 },
               },
               {
@@ -86,7 +96,8 @@ export const LandingPage: React.FC = () => {
           {
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
-            name: 'Status 200',
+            name: 'Status-200',
+            alternateName: ['Status 200', 'Status200'],
             applicationCategory: 'BusinessApplication',
             operatingSystem: 'Web',
             description:

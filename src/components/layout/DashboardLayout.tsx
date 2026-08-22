@@ -51,7 +51,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode; onNewPortfol
                 <Sparkles className="w-4 h-4 text-slate-950 stroke-[2.5]" />
               </div>
               <span className="font-display font-bold text-base tracking-tight text-white">
-                Status 200
+                Status-200
               </span>
             </Link>
 

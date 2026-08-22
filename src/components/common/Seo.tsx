@@ -8,10 +8,11 @@ export interface SeoProps {
   canonicalPath?: string;
   imagePath?: string;
   noindex?: boolean;
+  keywords?: string[];
   structuredData?: StructuredData;
 }
 
-const SITE_NAME = 'Status 200';
+const SITE_NAME = 'Status-200';
 
 function getBaseUrl() {
   if (typeof window !== 'undefined' && window.location?.origin) {
@@ -65,6 +66,7 @@ export function Seo({
   canonicalPath,
   imagePath,
   noindex = false,
+  keywords,
   structuredData,
 }: SeoProps) {
   useEffect(() => {
@@ -75,6 +77,9 @@ export function Seo({
     document.title = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 
     upsertMeta('meta[name="description"]', { name: 'description' }, description);
+    if (keywords && keywords.length > 0) {
+      upsertMeta('meta[name="keywords"]', { name: 'keywords' }, keywords.join(', '));
+    }
     upsertMeta(
       'meta[name="robots"]',
       { name: 'robots' },
@@ -127,7 +132,7 @@ export function Seo({
     return () => {
       document.head.querySelectorAll('[data-seo="true"]').forEach((node) => node.remove());
     };
-  }, [canonicalPath, description, imagePath, noindex, structuredData, title]);
+  }, [canonicalPath, description, imagePath, keywords, noindex, structuredData, title]);
 
   return null;
 }

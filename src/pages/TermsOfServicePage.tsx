@@ -9,7 +9,7 @@ const sections = [
   {
     title: 'Acceptance of terms',
     body: [
-      'By accessing or using Status 200, you agree to these Terms of Service and any additional policies we post.',
+      'By accessing or using Status-200, you agree to these Terms of Service and any additional policies we post.',
       'If you do not agree, do not use the service.',
     ],
   },
@@ -62,7 +62,7 @@ export const TermsOfServicePage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
       <Seo
         title="Terms of Service"
-        description="Terms of Service for Status 200."
+        description="Terms of Service for Status-200."
         canonicalPath="/terms-of-service"
       />
       <Navbar />
@@ -87,7 +87,7 @@ export const TermsOfServicePage: React.FC = () => {
               Terms of Service
             </h1>
             <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-              These terms explain the rules for using Status 200, including account access, user content, and paid
+              These terms explain the rules for using Status-200, including account access, user content, and paid
               features.
             </p>
             <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">

@@ -3,14 +3,14 @@ import { Card } from '@/components/common/Card';
 
 const FAQS = [
   {
-    question: 'What is Status 200?',
+    question: 'What is Status-200?',
     answer:
-      'Status 200 is a developer portfolio builder that helps students and developers create a polished public profile, publish it to a shareable URL, and keep it updated without writing custom code.',
+      'Status-200 is a developer portfolio builder that helps students and developers create a polished public profile, publish it to a shareable URL, and keep it updated without writing custom code.',
   },
   {
     question: 'Is this an AI profile builder?',
     answer:
-      'Yes. Status 200 works like an AI profile builder for developer portfolios by guiding you through your bio, projects, skills, and experience so the final profile is structured, clear, and recruiter-friendly.',
+      'Yes. Status-200 works like an AI profile builder for developer portfolios by guiding you through your bio, projects, skills, and experience so the final profile is structured, clear, and recruiter-friendly.',
   },
   {
     question: 'Do I need to pay to get started?',
@@ -30,7 +30,7 @@ const FAQS = [
   {
     question: 'How do I get my profile to appear on Google?',
     answer:
-      'Publish your portfolio, use a clean slug, add descriptive project titles, and keep the page indexable. Status 200 includes those SEO basics so public profiles can be crawled by Google.',
+      'Publish your portfolio, use a clean slug, add descriptive project titles, and keep the page indexable. Status-200 includes those SEO basics so public profiles can be crawled by Google.',
   },
 ];
 
@@ -46,7 +46,7 @@ export const FAQSection: React.FC = () => {
             Common questions about the AI profile builder.
           </h2>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
-            These answers help visitors and search engines understand what Status 200 does and who it is for.
+            These answers help visitors and search engines understand what Status-200 does and who it is for.
           </p>
         </div>
 

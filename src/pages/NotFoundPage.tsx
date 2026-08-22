@@ -11,7 +11,7 @@ export const NotFoundPage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 text-center selection:bg-emerald-500 selection:text-slate-950">
       <Seo
         title="404 - Page Not Found"
-        description="The page you were looking for does not exist on Status 200."
+        description="The page you were looking for does not exist on Status-200."
         canonicalPath="/404"
         noindex
       />

@@ -102,11 +102,11 @@ export const PricingSection: React.FC = () => {
         key: keyId,
         amount: createOrderData.amount,
         currency: createOrderData.currency,
-        name: 'Status 200',
+        name: 'Status-200',
         description: 'Pro Graduate Plan',
         order_id: createOrderData.order_id,
         prefill: {
-          name: 'Status 200 User',
+          name: 'Status-200 User',
           email: '',
           contact: '',
         },
@@ -289,7 +289,7 @@ export const PricingSection: React.FC = () => {
                   </li>
                   <li className="flex items-center gap-2.5 text-slate-600 dark:text-slate-300">
                     <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                    <span>Remove Status 200 branding badge</span>
+                    <span>Remove Status-200 branding badge</span>
                   </li>
                   <li className="flex items-center gap-2.5 text-slate-600 dark:text-slate-300">
                     <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />

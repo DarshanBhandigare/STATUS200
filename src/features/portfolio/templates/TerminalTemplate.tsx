@@ -41,7 +41,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme, isPu
     : personal.fullName
     ? personal.fullName.trim().split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '') || 'dev'
     : 'dev';
-  const promptPrefix = `${username}@status200:~$`;
+  const promptPrefix = `${username}@status-200:~$`;
 
   const copyEmail = () => {
     if (personal.email) {
@@ -69,7 +69,7 @@ export const TerminalTemplate: React.FC<TemplateProps> = ({ content, theme, isPu
               <div className="w-3 h-3 rounded-full bg-amber-500/80 hover:opacity-80 transition-opacity" />
               <div className="w-3 h-3 rounded-full bg-emerald-500/80 hover:opacity-80 transition-opacity" />
               <span className="text-xs text-slate-400 ml-2 font-mono hidden sm:inline">
-                status200@terminal: ~/{username}
+                status-200@terminal: ~/{username}
               </span>
             </div>
 

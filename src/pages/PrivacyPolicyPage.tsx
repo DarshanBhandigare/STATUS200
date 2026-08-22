@@ -50,7 +50,7 @@ export const PrivacyPolicyPage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
       <Seo
         title="Privacy Policy"
-        description="Privacy Policy for Status 200."
+        description="Privacy Policy for Status-200."
         canonicalPath="/privacy-policy"
       />
       <Navbar />
@@ -75,7 +75,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               Privacy Policy
             </h1>
             <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-              This policy explains how Status 200 handles information when you use the portfolio builder and public
+              This policy explains how Status-200 handles information when you use the portfolio builder and public
               portfolio pages.
             </p>
             <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">

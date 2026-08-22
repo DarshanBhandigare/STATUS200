@@ -21,7 +21,7 @@ export const Navbar: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-display font-bold text-lg tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-              Status 200
+              Status-200
               <span className="text-[10px] font-mono px-1.5 py-0.2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded font-normal">
                 v1.0
               </span>

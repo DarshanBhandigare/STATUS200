@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
               <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center shadow-glow">
                 <Sparkles className="w-4 h-4 text-slate-950 stroke-[2.5]" />
               </div>
-              <span className="font-display font-bold text-lg text-slate-900 dark:text-white">Status 200</span>
+              <span className="font-display font-bold text-lg text-slate-900 dark:text-white">Status-200</span>
             </Link>
             <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
               The modern portfolio builder designed specifically for computer science students, junior developers,
@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-900"
-                aria-label="Status 200 on GitHub"
+                aria-label="Status-200 on GitHub"
               >
                 <GithubIcon className="w-4 h-4" />
               </a>
@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-900"
-                aria-label="Status 200 on Twitter"
+                aria-label="Status-200 on Twitter"
               >
                 <TwitterIcon className="w-4 h-4" />
               </a>
@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-900"
-                aria-label="Status 200 on LinkedIn"
+                aria-label="Status-200 on LinkedIn"
               >
                 <LinkedinIcon className="w-4 h-4" />
               </a>
@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="mt-12 pt-6 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>(c) {new Date().getFullYear()} Status 200. Crafted for future engineers and developers.</p>
+          <p>(c) {new Date().getFullYear()} Status-200. Crafted for future engineers and developers.</p>
           <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
             <span>Built with precision for students worldwide</span>
           </div>
