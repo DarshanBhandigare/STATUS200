@@ -15,7 +15,7 @@ Status 200 is a modern portfolio builder designed for students, junior developer
 
 ---
 
-### Live Demo
+### Live
 
 - [status-200.vercel.app](https://status-200.vercel.app/)
 
